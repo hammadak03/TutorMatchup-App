@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tutor_matchup/views/welcome_screen.dart';
+import 'package:tutor_matchup/views/login_screen.dart';
+// import 'routes/routes.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,7 +12,9 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'TutorMatchup',
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      // initialRoute: Routes.welcome,
+      // routes: appRoutes,
+      home: LoginScreen(),
     );
   }
 }
