@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "950061300731",
+    "project_id": "tutormatchup-fa4ab",
+    "storage_bucket": "tutormatchup-fa4ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950061300731:android:5c25d139641e28d702a95e",
+        "android_client_info": {
+          "package_name": "com.tutormatchup.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsJYIz_VxytSfsT2CC4N9b5LbJQJRz0_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
