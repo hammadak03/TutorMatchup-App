@@ -26,7 +26,9 @@ class RegisterationScreen extends StatelessWidget {
             height: 40,
           ),
           CustomButton(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.studentRegisteration);
+            },
             buttonText: 'Are You Student?',
           ),
           const SizedBox(
