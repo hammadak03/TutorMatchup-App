@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
@@ -23,12 +24,15 @@ class LoginScreen extends StatelessWidget {
             fontSize: 24,
           ),
           const SizedBox(
-            height: 20,
+            height: 40,
           ),
           CustomTextField(
             controller: emailController,
             hintText: 'example@gmail.com',
             labelText: 'Email',
+          ),
+          const SizedBox(
+            height: 20,
           ),
           CustomTextField(
             controller: passwordController,
@@ -119,7 +123,9 @@ class LoginScreen extends StatelessWidget {
                 fontSize: 16,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.registeration);
+                },
                 child: const CustomTextWidget(
                   text: 'Sign-up',
                   textColor: lightBlueColor,
@@ -128,7 +134,7 @@ class LoginScreen extends StatelessWidget {
               )
             ],
           ),
-          CustomTextWidget(
+          const CustomTextWidget(
             text: 'User Guidelines',
             textColor: lightBlueColor,
             fontSize: 18,

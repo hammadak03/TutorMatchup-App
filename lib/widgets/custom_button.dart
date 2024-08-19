@@ -24,10 +24,10 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: onTap,
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [
@@ -53,6 +53,7 @@ class CustomButton extends StatelessWidget {
               Positioned(
                 left: 5,
                 child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
                   backgroundImage:
                       AssetImage(image!), // Use ! to ensure it's not null
                 ),

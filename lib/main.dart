@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/firebase_options.dart';
-import 'package:tutor_matchup/views/login_screen.dart';
-import 'package:tutor_matchup/views/welcome_screen.dart';
-// import 'routes/routes.dart';
+import 'package:tutor_matchup/routes/routes.dart';
+import 'package:tutor_matchup/views/tutor_registration_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -17,12 +17,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'TutorMatchup',
       debugShowCheckedModeBanner: false,
-      // initialRoute: Routes.welcome,
-      // routes: appRoutes,
-      home: WelcomeScreen(),
+      // initialRoute: Routes.tutorRegisteration,
+      initialRoute: Routes.login,
+      routes: appRoutes,
+      // home: TutorRegistrationScreen(),
     );
   }
 }

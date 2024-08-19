@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:950061300731:android:5c25d139641e28d702a95e",
         "android_client_info": {
-          "package_name": "com.tutormatchup.app"
+          "package_name": "com.example.tutor_matchup"
         }
       },
       "oauth_client": [],

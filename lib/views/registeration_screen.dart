@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class RegisterationScreen extends StatelessWidget {
+  const RegisterationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,9 @@ class WelcomeScreen extends StatelessWidget {
             height: 40,
           ),
           CustomButton(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.tutorRegisteration);
+            },
             buttonText: 'Are You Teacher?',
           ),
         ],

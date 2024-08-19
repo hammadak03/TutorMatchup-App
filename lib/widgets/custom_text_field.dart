@@ -35,15 +35,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextWidget(
-            text: widget.labelText ?? '',
-            textColor: smokyBrownColor,
-            fontSize: 14,
-          ),
+          if (widget.labelText != null)
+            CustomTextWidget(
+              text: widget.labelText ?? '',
+              textColor: smokyBrownColor,
+              fontSize: 14,
+            ),
           const SizedBox(height: 5),
           TextField(
             controller: widget.controller,
