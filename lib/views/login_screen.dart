@@ -5,6 +5,8 @@ import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
+import '../services/firebase_auth_services.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -50,22 +52,7 @@ class LoginScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      checkColor: blackColor,
-                      activeColor: Colors.transparent,
-                      value: true,
-                      onChanged: (value) {},
-                    ),
-                    const CustomTextWidget(
-                      text: 'Remember Me',
-                      textColor: blackColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ],
-                ),
+                RememberMeCheckbox(onChanged: (value) {}),
                 TextButton(
                   onPressed: () {},
                   child: const CustomTextWidget(
@@ -79,7 +66,20 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            CustomButton(onTap: () {}, buttonText: 'Sign Up'),
+            CustomButton(
+                onTap: () async {
+                  try {
+                    final FirebaseAuthService authService =
+                        FirebaseAuthService();
+                    await authService.login(
+                        emailController.text, passwordController.text);
+
+                    Navigator.pushNamed(context, Routes.home);
+                  } catch (e) {
+                    // Handle the error, e.g., show a Snackbar
+                  }
+                },
+                buttonText: 'Sign In '),
             const SizedBox(
               height: 20,
             ),
@@ -147,6 +147,55 @@ class LoginScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class RememberMeCheckbox extends StatefulWidget {
+  final bool initialValue;
+  final ValueChanged<bool> onChanged;
+
+  const RememberMeCheckbox({
+    super.key,
+    this.initialValue = false,
+    required this.onChanged,
+  });
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _RememberMeCheckboxState createState() => _RememberMeCheckboxState();
+}
+
+class _RememberMeCheckboxState extends State<RememberMeCheckbox> {
+  late bool _isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = widget.initialValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Checkbox(
+          checkColor: blackColor,
+          activeColor: Colors.transparent,
+          value: _isChecked,
+          onChanged: (value) {
+            setState(() {
+              _isChecked = value ?? false;
+            });
+            widget.onChanged(_isChecked);
+          },
+        ),
+        const CustomTextWidget(
+          text: 'Remember Me',
+          textColor: blackColor,
+          fontWeight: FontWeight.w500,
+        ),
+      ],
     );
   }
 }

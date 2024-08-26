@@ -10,6 +10,16 @@ class TutorRegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController phoneNoController = TextEditingController();
+    final TextEditingController educationController = TextEditingController();
+    final TextEditingController availabilityController =
+        TextEditingController();
+    final TextEditingController experienceController = TextEditingController();
+    final TextEditingController subjectsController = TextEditingController();
+    final TextEditingController resumeController = TextEditingController();
     return Scaffold(
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
@@ -27,39 +37,77 @@ class TutorRegistrationScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const CustomTextField(
-              hintText: 'Enter Your Username',
+            CustomTextField(
+              controller: nameController,
+              hintText: 'Enter Your Name',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: emailController,
               hintText: 'Email',
             ),
             CustomTextField(
+              controller: passwordController,
               hintText: 'Password',
               suffixIcon: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.visibility_off_outlined),
               ),
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: phoneNoController,
               hintText: 'Phone Number',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: educationController,
               hintText: 'Highest Level of Education',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: availabilityController,
               hintText: 'Availability',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: experienceController,
               hintText: 'Previous Experience',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: subjectsController,
               hintText: 'Subjects Want to Teach',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: resumeController,
               hintText: 'Attach Resume',
             ),
             CustomButton(
-              onTap: () {},
+              onTap: () {
+                if (nameController.text.isNotEmpty &&
+                    emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty &&
+                    phoneNoController.text.isNotEmpty &&
+                    educationController.text.isNotEmpty &&
+                    availabilityController.text.isNotEmpty &&
+                    experienceController.text.isNotEmpty &&
+                    subjectsController.text.isNotEmpty &&
+                    resumeController.text.isNotEmpty) {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.userGuidelines,
+                    arguments: {
+                      'userType': 'tutor',
+                      'name': nameController.text,
+                      'email': emailController.text,
+                      'password': passwordController.text,
+                      'phoneNo': phoneNoController.text,
+                      'education': educationController.text,
+                      'availability': availabilityController.text,
+                      'experience': experienceController.text,
+                      'subjects': subjectsController.text,
+                      'resume': resumeController.text,
+                    },
+                  );
+                } else {
+                  // Handle empty fields, show a message
+                }
+              },
               buttonText: 'Create Account',
             ),
             TextButton(
@@ -76,7 +124,7 @@ class TutorRegistrationScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text.rich(
                 TextSpan(
-                  text: 'By clicking \"Create Account" you agree to our ',
+                  text: 'By clicking "Create Account" you agree to our ',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,

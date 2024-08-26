@@ -10,6 +10,17 @@ class StudentRegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController instituteController = TextEditingController();
+    final TextEditingController yearController = TextEditingController();
+    final TextEditingController learningFormatController =
+        TextEditingController();
+    final TextEditingController preferredDaysController =
+        TextEditingController();
+    final TextEditingController preferredTimeController =
+        TextEditingController();
     return Scaffold(
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
@@ -27,39 +38,74 @@ class StudentRegistrationScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            const CustomTextField(
-              hintText: 'Enter Your Username',
+            CustomTextField(
+              hintText: 'Enter Your Name',
+              controller: nameController,
             ),
-            const CustomTextField(
+            CustomTextField(
               hintText: 'Email',
+              controller: emailController,
             ),
             CustomTextField(
               hintText: 'Password',
+              controller: passwordController,
               suffixIcon: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.visibility_off_outlined),
               ),
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: instituteController,
               hintText: 'School/College/University',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: yearController,
               hintText: 'Grade/Year',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: learningFormatController,
               hintText: 'Learning Format',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: preferredDaysController,
               hintText: 'Preferred Days',
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: preferredTimeController,
               hintText: 'Preferred Time',
             ),
             const SizedBox(
               height: 20,
             ),
             CustomButton(
-              onTap: () {},
+              onTap: () {
+                if (nameController.text.isNotEmpty &&
+                    emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty &&
+                    instituteController.text.isNotEmpty &&
+                    yearController.text.isNotEmpty &&
+                    learningFormatController.text.isNotEmpty &&
+                    preferredDaysController.text.isNotEmpty &&
+                    preferredTimeController.text.isNotEmpty) {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.userGuidelines,
+                    arguments: {
+                      'userType': 'student',
+                      'name': nameController.text,
+                      'email': emailController.text,
+                      'password': passwordController.text,
+                      'institute': instituteController.text,
+                      'year': yearController.text,
+                      'learningFormat': learningFormatController.text,
+                      'preferredDays': preferredDaysController.text,
+                      'preferredTime': preferredTimeController.text,
+                    },
+                  );
+                } else {
+                  // Handle empty fields, show a message
+                }
+              },
               buttonText: 'Create Account',
             ),
             TextButton(
