@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
+import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
+import 'package:tutor_matchup/widgets/near_tutor_card.dart';
+import 'package:tutor_matchup/widgets/upcomming_tutor_card.dart';
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({super.key});
@@ -8,6 +11,7 @@ class StudentHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -16,7 +20,7 @@ class StudentHomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
@@ -37,112 +41,165 @@ class StudentHomeScreen extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(Icons.notifications_outlined),
+                        icon: const Icon(Icons.notifications_outlined),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(Icons.menu),
+                        icon: const Icon(Icons.menu),
                       ),
                     ],
                   ),
                 ],
               ),
+            ), //appba4/intro
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    child: UpcommingTutorCard(
+                        name: 'Ahmed',
+                        availableDays: 'Monday-Tuesday',
+                        availableTime: '5:00 - 6:00 pm',
+                        subjects: 'Biology - Maths'),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const CustomTextField(
+              hintText: 'Search tutor or Subjects',
+              prefixIcon: Icon(Icons.search),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                QuickAccessButton(
+                  icon: const Icon(Icons.note_alt_outlined),
+                  text: 'Assignment',
+                  onPressed: () {},
+                ),
+                QuickAccessButton(
+                  icon: const Icon(Icons.person_add_alt_1),
+                  text: 'Tutors',
+                  onPressed: () {},
+                ),
+                QuickAccessButton(
+                  icon: const Icon(Icons.menu_book_outlined),
+                  text: 'Subjects',
+                  onPressed: () {},
+                ),
+                QuickAccessButton(
+                  icon: const Icon(Icons.house_rounded),
+                  text: 'Hybrid',
+                  onPressed: () {},
+                ),
+              ],
             ),
             const SizedBox(
               height: 20,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.width * 0.4,
-              decoration: BoxDecoration(
-                color: lightBlueColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
+            const Align(
+              alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          child: Icon(Icons.person),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              text: 'Ahmed',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            CustomTextWidget(
-                              text: 'Biology-Maths',
-                              fontSize: 14,
-                              textColor: Color(0xFFCBE1FF),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.22,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.keyboard_arrow_right_sharp,
-                            color: whiteColor,
-                            size: 40,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      indent: 30,
-                      endIndent: 30,
-                      color: Colors.white38,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_today_outlined,
-                              color: whiteColor,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            CustomTextWidget(text: 'Monday-Tuesday')
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.history_toggle_off_outlined,
-                              color: whiteColor,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            CustomTextWidget(text: '5:00 - 6:00 PM')
-                          ],
-                        )
-                      ],
-                    )
-                  ],
+                padding: EdgeInsets.only(left: 10.0),
+                child: CustomTextWidget(
+                  text: 'Near Tutors',
+                  fontWeight: FontWeight.w700,
+                  textColor: Color(0xFF0D1B34),
+                  fontSize: 16,
                 ),
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    child: NearTutorCard(
+                        name: 'Mamtaz Pawnar',
+                        reviews: '4.8 (120 Reviews)',
+                        location: '1.8 Km',
+                        opensAt: 'Open at 4:00pm',
+                        subjects: 'Physics Specialist'),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   elevation: 0.0,
+      //   backgroundColor: whiteColor,
+      //   currentIndex: 0,
+      //   onTap: (value) {},
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home, color: lightBlueColor),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.calendar_today, color: Colors.grey),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.chat_bubble_outline, color: Colors.grey),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person_outline, color: Colors.grey),
+      //       label: '',
+      //     ),
+      //   ],
+      //   type: BottomNavigationBarType.fixed,
+      // ),
+    );
+  }
+}
+
+class QuickAccessButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final Icon icon;
+  final String text;
+  const QuickAccessButton(
+      {required this.onPressed,
+      required this.icon,
+      required this.text,
+      super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          icon: icon,
+          color: lightBlueColor,
+          onPressed: onPressed,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        CustomTextWidget(
+          text: text,
+          textColor: const Color(0xFF8696BB),
+        )
+      ],
     );
   }
 }

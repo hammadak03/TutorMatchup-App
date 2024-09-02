@@ -7,6 +7,7 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final TextInputType? textInputType;
   final IconButton? suffixIcon;
+  final Icon? prefixIcon;
   final TextEditingController? controller;
 
   const CustomTextField({
@@ -15,6 +16,7 @@ class CustomTextField extends StatefulWidget {
     this.textInputType,
     required this.hintText,
     this.labelText,
+    this.prefixIcon,
     super.key,
   });
 
@@ -50,6 +52,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             controller: widget.controller,
             obscureText: widget.suffixIcon != null ? _obscureText : false,
             decoration: InputDecoration(
+              prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
