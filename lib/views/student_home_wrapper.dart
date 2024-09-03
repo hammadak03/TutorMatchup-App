@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
-import 'completed_schedules_screen.dart';
-import 'missed_schedules_screen.dart';
+import 'package:tutor_matchup/views/inbox_screen.dart';
+import 'package:tutor_matchup/views/profile_screen.dart';
 import 'student_home_screen.dart';
 import 'upcoming_schedule_screen.dart';
 
@@ -19,8 +19,8 @@ class _StudentHomeWrapperState extends State<StudentHomeWrapper> {
   final List<Widget> _screens = [
     const StudentHomeScreen(),
     const UpcomingScheduleScreen(),
-    const MissedSchedulesScreen(),
-    const CompletedSchedulesScreen(),
+    const InboxScreen(),
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -32,6 +32,7 @@ class _StudentHomeWrapperState extends State<StudentHomeWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       body: SafeArea(child: _screens[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

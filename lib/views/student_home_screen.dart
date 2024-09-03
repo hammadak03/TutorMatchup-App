@@ -144,31 +144,6 @@ class StudentHomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   elevation: 0.0,
-      //   backgroundColor: whiteColor,
-      //   currentIndex: 0,
-      //   onTap: (value) {},
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home, color: lightBlueColor),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.calendar_today, color: Colors.grey),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.chat_bubble_outline, color: Colors.grey),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person_outline, color: Colors.grey),
-      //       label: '',
-      //     ),
-      //   ],
-      //   type: BottomNavigationBarType.fixed,
-      // ),
     );
   }
 }
