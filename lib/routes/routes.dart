@@ -1,11 +1,14 @@
 // routes.dart
 import 'package:flutter/material.dart';
+import 'package:tutor_matchup/views/chat_screen.dart';
 import 'package:tutor_matchup/views/completed_schedules_screen.dart';
 import 'package:tutor_matchup/views/missed_schedules_screen.dart';
 import 'package:tutor_matchup/views/student_home_screen.dart';
 import 'package:tutor_matchup/views/login_screen.dart';
 import 'package:tutor_matchup/views/registeration_screen.dart';
+import 'package:tutor_matchup/views/student_home_wrapper.dart';
 import 'package:tutor_matchup/views/student_registration_screen.dart';
+import 'package:tutor_matchup/views/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/tutor_registration_screen.dart';
 import 'package:tutor_matchup/views/upcoming_schedule_screen.dart';
 import 'package:tutor_matchup/views/user_guidelines_screen.dart';
@@ -20,6 +23,9 @@ class Routes {
   static const String upcommingSchedules = '/upcommingSchedules';
   static const String missedSchedules = '/missedSchedules';
   static const String completedSchedules = '/completedSchedules';
+  static const String chat = '/chat';
+  static const String studentHomeWrapper = '/studentHomeWrapper';
+  static const String tutorHome = '/tutorHome';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -32,4 +38,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.completedSchedules: (context) => const CompletedSchedulesScreen(),
   Routes.upcommingSchedules: (context) => const UpcomingScheduleScreen(),
   Routes.missedSchedules: (context) => const MissedSchedulesScreen(),
+  Routes.chat: (context) => const ChatScreen(),
+  Routes.studentHomeWrapper: (context) => const StudentHomeWrapper(),
+  Routes.tutorHome: (context) => const TutorHomeScreen(),
 };

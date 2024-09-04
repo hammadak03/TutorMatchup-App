@@ -5,8 +5,7 @@ import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import '../models/user_model.dart';
 
 class ChatScreen extends StatefulWidget {
-  final User user;
-  const ChatScreen({required this.user, super.key});
+  const ChatScreen({super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -175,12 +174,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ModalRoute.of(context)!.settings.arguments as User;
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
         title: CustomTextWidget(
-          text: widget.user.name,
+          text: user.name,
           fontSize: 16,
           textColor: lightBlueColor,
         ),

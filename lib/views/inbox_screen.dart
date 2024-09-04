@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import '../models/message_model.dart';
-import 'chat_screen.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
@@ -32,10 +32,11 @@ class InboxScreen extends StatelessWidget {
           final Message chat = chats[index];
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatScreen(user: chat.sender)));
+              Navigator.pushNamed(
+                context,
+                Routes.chat,
+                arguments: chat.sender, // User object passed as arguments
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

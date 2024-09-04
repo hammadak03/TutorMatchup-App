@@ -112,6 +112,7 @@ class UserGuidelinesScreen extends StatelessWidget {
                         preferredTime,
                         '', // Assuming no resume file for students; adjust as needed
                       );
+                      Navigator.pushNamed(context, Routes.studentHomeWrapper);
                     } else if (userType == 'tutor') {
                       await authService.tutorSignUp(
                         email,
@@ -124,8 +125,9 @@ class UserGuidelinesScreen extends StatelessWidget {
                         subjects,
                         resume,
                       );
+                      //TODO: Navigate to tutor home screen.
+                      Navigator.pushNamed(context, Routes.tutorHome);
                     }
-                    Navigator.pushNamed(context, Routes.home);
                   } catch (e) {
                     // Handle the error, e.g., show a Snackbar
                   }

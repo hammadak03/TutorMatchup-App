@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/widgets/appointed_tutor_card.dart';
 import '../utils/colors.dart';
 import '../widgets/custom_text_widget.dart';
-import 'completed_schedules_screen.dart';
-import 'missed_schedules_screen.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 
 class UpcomingScheduleScreen extends StatelessWidget {
   const UpcomingScheduleScreen({super.key});
@@ -16,18 +15,15 @@ class UpcomingScheduleScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CompletedSchedulesScreen()),
-                );
-              },
-              child: const CustomTextWidget(
-                text: 'Completed',
-                fontSize: 12,
-                textColor: Color(0xFF8696BB),
-              )),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.completedSchedules);
+            },
+            child: const CustomTextWidget(
+              text: 'Completed',
+              fontSize: 12,
+              textColor: Color(0xFF8696BB),
+            ),
+          ),
         ],
         leadingWidth: 67,
         leading: TextButton(
@@ -37,11 +33,7 @@ class UpcomingScheduleScreen extends StatelessWidget {
             fontSize: 12,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const MissedSchedulesScreen()),
-            );
+            Navigator.pushNamed(context, Routes.missedSchedules);
           },
         ),
         title: const CustomTextWidget(

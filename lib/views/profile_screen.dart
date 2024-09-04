@@ -95,12 +95,13 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               TextButton(
-                  onPressed: () {},
-                  child: const CustomTextWidget(
-                    text: 'Settings',
-                    fontSize: 16,
-                    textColor: Color(0xFFAEAEAE),
-                  ))
+                onPressed: () {},
+                child: const CustomTextWidget(
+                  text: 'Settings',
+                  fontSize: 16,
+                  textColor: Color(0xFFAEAEAE),
+                ),
+              ),
             ],
           ),
         ],

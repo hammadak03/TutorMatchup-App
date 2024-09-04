@@ -73,8 +73,9 @@ class LoginScreen extends StatelessWidget {
                         FirebaseAuthService();
                     await authService.login(
                         emailController.text, passwordController.text);
+                    //TODO: add condition if user is teacher, navigate to tutor screen and vice versa
 
-                    Navigator.pushNamed(context, Routes.home);
+                    Navigator.pushNamed(context, Routes.studentHomeWrapper);
                   } catch (e) {
                     // Handle the error, e.g., show a Snackbar
                   }

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/firebase_options.dart';
-import 'package:tutor_matchup/views/student_home_wrapper.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TutorMatchup',
       debugShowCheckedModeBanner: false,
-      home: StudentHomeWrapper(),
-      // initialRoute: Routes.login,
-      // routes: appRoutes,
-      // home: UserGuidelinesScreen(),
+      initialRoute: Routes.login,
+      routes: appRoutes,
     );
   }
 }
