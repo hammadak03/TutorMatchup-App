@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
+
 import 'custom_text_widget.dart';
 
-class NearTutorCard extends StatelessWidget {
+class UpcommingLectureCard extends StatelessWidget {
   final String name;
   final String subjects;
-  final String location;
-  final String reviews;
-  final String opensAt;
-  const NearTutorCard(
+  final String availableDays;
+  final String availableTime;
+  const UpcommingLectureCard(
       {required this.name,
-      required this.reviews,
-      required this.location,
-      required this.opensAt,
+      required this.availableDays,
+      required this.availableTime,
       required this.subjects,
       super.key});
 
@@ -22,7 +21,7 @@ class NearTutorCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
-        color: whiteColor,
+        color: lightBlueColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -48,12 +47,12 @@ class NearTutorCard extends StatelessWidget {
                           text: name,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          textColor: midnightBlueColor,
+                          textColor: whiteColor,
                         ),
                         CustomTextWidget(
                           text: subjects,
                           fontSize: 14,
-                          textColor: lightPeriwinkleColor,
+                          textColor: const Color(0xFFCBE1FF),
                         ),
                       ],
                     ),
@@ -61,18 +60,13 @@ class NearTutorCard extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.location_pin,
-                        color: coolGrayColor,
-                      ),
-                      CustomTextWidget(
-                        text: location,
-                        textColor: coolGrayColor,
-                        fontSize: 14,
-                      )
-                    ],
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.keyboard_arrow_right_sharp,
+                      color: whiteColor,
+                      size: 40,
+                    ),
                   ),
                 ),
               ],
@@ -87,14 +81,14 @@ class NearTutorCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
-                      Icons.alarm,
-                      color: amberColor,
+                    Icon(
+                      Icons.calendar_month,
+                      color: whiteColor,
                     ),
                     const SizedBox(width: 5),
                     CustomTextWidget(
-                      text: reviews,
-                      textColor: amberColor,
+                      text: availableDays,
+                      textColor: whiteColor,
                     )
                   ],
                 ),
@@ -102,12 +96,12 @@ class NearTutorCard extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.alarm,
-                      color: lightBlueColor,
+                      color: whiteColor,
                     ),
                     const SizedBox(width: 5),
                     CustomTextWidget(
-                      text: opensAt,
-                      textColor: lightBlueColor,
+                      text: availableTime,
+                      textColor: whiteColor,
                     ),
                   ],
                 )

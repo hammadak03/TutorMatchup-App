@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
-
 import 'custom_text_widget.dart';
 
-class UpcommingTutorCard extends StatelessWidget {
+class LectureRequestCard extends StatelessWidget {
   final String name;
-  final String subjects;
-  final String availableDays;
-  final String availableTime;
-  const UpcommingTutorCard(
+  final String institute;
+  final String year;
+  final String grade;
+  const LectureRequestCard(
       {required this.name,
-      required this.availableDays,
-      required this.availableTime,
-      required this.subjects,
+      required this.year,
+      required this.grade,
+      required this.institute,
       super.key});
 
   @override
@@ -21,7 +20,7 @@ class UpcommingTutorCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
-        color: lightBlueColor,
+        color: whiteColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -47,10 +46,10 @@ class UpcommingTutorCard extends StatelessWidget {
                           text: name,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          textColor: whiteColor,
+                          textColor: const Color(0xFF0D1B34),
                         ),
                         CustomTextWidget(
-                          text: subjects,
+                          text: institute,
                           fontSize: 14,
                           textColor: const Color(0xFFCBE1FF),
                         ),
@@ -64,7 +63,7 @@ class UpcommingTutorCard extends StatelessWidget {
                     onPressed: () {},
                     icon: const Icon(
                       Icons.keyboard_arrow_right_sharp,
-                      color: whiteColor,
+                      color: Color(0xFFCBE1FF),
                       size: 40,
                     ),
                   ),
@@ -81,27 +80,27 @@ class UpcommingTutorCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.calendar_month,
-                      color: whiteColor,
+                    const Icon(
+                      Icons.school,
+                      color: Color(0xFFFEB052),
                     ),
                     const SizedBox(width: 5),
                     CustomTextWidget(
-                      text: availableDays,
-                      textColor: whiteColor,
+                      text: year,
+                      textColor: const Color(0xFFFEB052),
                     )
                   ],
                 ),
                 Row(
                   children: [
                     const Icon(
-                      Icons.alarm,
-                      color: whiteColor,
+                      Icons.star,
+                      color: lightBlueColor,
                     ),
                     const SizedBox(width: 5),
                     CustomTextWidget(
-                      text: availableTime,
-                      textColor: whiteColor,
+                      text: grade,
+                      textColor: lightBlueColor,
                     ),
                   ],
                 )

@@ -3,7 +3,7 @@ import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import 'package:tutor_matchup/widgets/near_tutor_card.dart';
-import 'package:tutor_matchup/widgets/upcomming_tutor_card.dart';
+import 'package:tutor_matchup/widgets/upcomming_lecture_card.dart';
 
 class StudentHomeScreen extends StatelessWidget {
   const StudentHomeScreen({super.key});
@@ -62,7 +62,7 @@ class StudentHomeScreen extends StatelessWidget {
                   return const Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                    child: UpcommingTutorCard(
+                    child: UpcommingLectureCard(
                         name: 'Ahmed',
                         availableDays: 'Monday-Tuesday',
                         availableTime: '5:00 - 6:00 pm',
@@ -116,7 +116,7 @@ class StudentHomeScreen extends StatelessWidget {
                 child: CustomTextWidget(
                   text: 'Near Tutors',
                   fontWeight: FontWeight.w700,
-                  textColor: Color(0xFF0D1B34),
+                  textColor: midnightBlueColor,
                   fontSize: 16,
                 ),
               ),
@@ -172,7 +172,7 @@ class QuickAccessButton extends StatelessWidget {
         ),
         CustomTextWidget(
           text: text,
-          textColor: const Color(0xFF8696BB),
+          textColor: coolGrayColor,
         )
       ],
     );

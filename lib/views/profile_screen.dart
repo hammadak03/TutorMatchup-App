@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
+import '../routes/routes.dart';
+import '../services/firebase_auth_services.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -12,7 +15,18 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  final FirebaseAuthService authService = FirebaseAuthService();
+                  await authService.signOut();
+                  //TODO: add condition if user is teacher, navigate to tutor screen and vice versa
+
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(context, Routes.login);
+                } catch (e) {
+                  // Handle the error, e.g., show a Snackbar
+                }
+              },
               child: const CustomTextWidget(
                 text: 'Logout',
                 fontSize: 16,
