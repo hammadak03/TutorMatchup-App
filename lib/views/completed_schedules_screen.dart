@@ -29,7 +29,8 @@ class CompletedSchedulesScreen extends StatelessWidget {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height *
                     0.2, // Set the height of each item
-                child: const AppointedTutorCard(
+                child: AppointedTutorCard(
+                  onTap: () {},
                   name: 'Engr. Sarfaraz',
                   date: 'Monday, 15 April',
                   time: '11:00 - 12:00 AM',

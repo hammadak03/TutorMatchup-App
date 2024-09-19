@@ -9,9 +9,11 @@ class AppointedTutorCard extends StatelessWidget {
   final String subjects;
   final String date;
   final String time;
+  final VoidCallback onTap;
   const AppointedTutorCard(
       {required this.name,
       required this.date,
+      required this.onTap,
       required this.time,
       required this.subjects,
       super.key});
@@ -102,7 +104,7 @@ class AppointedTutorCard extends StatelessWidget {
               ],
             ),
             CustomButton(
-              onTap: () {},
+              onTap: onTap,
               buttonText: 'Details',
               backgroundColor: whiteColor,
               buttonTextColor: lightBlueColor,

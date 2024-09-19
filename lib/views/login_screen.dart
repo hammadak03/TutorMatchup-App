@@ -1,19 +1,30 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
-
 import '../services/firebase_auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
     return Scaffold(
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
@@ -66,21 +77,58 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            CustomButton(
-                onTap: () async {
-                  try {
-                    final FirebaseAuthService authService =
-                        FirebaseAuthService();
-                    await authService.login(
-                        emailController.text, passwordController.text);
-                    //TODO: add condition if user is teacher, navigate to tutor screen and vice versa
-
-                    Navigator.pushNamed(context, Routes.studentHomeWrapper);
-                  } catch (e) {
-                    // Handle the error, e.g., show a Snackbar
-                  }
-                },
-                buttonText: 'Sign In '),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : CustomButton(
+                    onTap: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      try {
+                        final FirebaseAuthService authService =
+                            FirebaseAuthService();
+                        await authService.login(
+                            emailController.text, passwordController.text);
+                        String userId = FirebaseAuth.instance.currentUser!.uid;
+                        DocumentSnapshot userDoc = await FirebaseFirestore
+                            .instance
+                            .collection('users')
+                            .doc(userId)
+                            .get();
+                        String userType = userDoc['userType'];
+                        // After successful login
+                        if (userType == 'student') {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            Routes.homeWrapper,
+                            arguments: 'student',
+                          );
+                        } else if (userType == 'tutor') {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            Routes.homeWrapper,
+                            arguments: 'tutor',
+                          );
+                        } else {
+                          // Handle the case if the userType is missing or invalid
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Unknown user type')),
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error: $e'),
+                          ),
+                        );
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+                    buttonText: 'Sign In',
+                  ),
             const SizedBox(
               height: 20,
             ),

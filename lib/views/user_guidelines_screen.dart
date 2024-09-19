@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/routes/routes.dart';
@@ -100,33 +102,45 @@ class UserGuidelinesScreen extends StatelessWidget {
                   try {
                     final FirebaseAuthService authService =
                         FirebaseAuthService();
+
+                    // Call the unified signUp method
+                    await authService.signUp(
+                      email: email,
+                      password: password,
+                      name: name,
+                      userType: userType,
+                      institute: userType == 'student' ? institute : '',
+                      year: userType == 'student' ? year : '',
+                      learningFormat:
+                          userType == 'student' ? learningFormat : '',
+                      preferredDays: userType == 'student' ? preferredDays : '',
+                      preferredTime: userType == 'student' ? preferredTime : '',
+                      phoneNo: userType == 'tutor' ? phoneNo : '',
+                      education: userType == 'tutor' ? education : '',
+                      availability: userType == 'tutor' ? availability : '',
+                      experience: userType == 'tutor' ? experience : '',
+                      subjects: userType == 'tutor' ? subjects : '',
+                      resume: userType == 'tutor' ? resume : '',
+                    );
+
+                    // Navigate based on userType
                     if (userType == 'student') {
-                      await authService.studentSignUp(
-                        email,
-                        password,
-                        name,
-                        institute,
-                        year,
-                        learningFormat,
-                        preferredDays,
-                        preferredTime,
-                        '', // Assuming no resume file for students; adjust as needed
+                      Navigator.pushReplacementNamed(
+                        context,
+                        Routes.homeWrapper,
+                        arguments: 'student',
                       );
-                      Navigator.pushNamed(context, Routes.studentHomeWrapper);
                     } else if (userType == 'tutor') {
-                      await authService.tutorSignUp(
-                        email,
-                        password,
-                        name,
-                        phoneNo,
-                        education,
-                        availability,
-                        experience,
-                        subjects,
-                        resume,
+                      Navigator.pushReplacementNamed(
+                        context,
+                        Routes.homeWrapper,
+                        arguments: 'tutor',
                       );
-                      //TODO: Navigate to tutor home screen.
-                      Navigator.pushNamed(context, Routes.tutorHome);
+                    } else {
+                      // Handle the case if the userType is missing or invalid
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Unknown user type')),
+                      );
                     }
                   } catch (e) {
                     // Handle the error, e.g., show a Snackbar

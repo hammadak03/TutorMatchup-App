@@ -1,45 +1,60 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/views/inbox_screen.dart';
 import 'package:tutor_matchup/views/profile_screen.dart';
 import 'student_home_screen.dart';
+import 'tutor_home_screen.dart'; // Import the Tutor Home Screen
 import 'upcoming_schedule_screen.dart';
 
-class StudentHomeWrapper extends StatefulWidget {
-  const StudentHomeWrapper({super.key});
+class HomeWrapper extends StatefulWidget {
+  const HomeWrapper({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StudentHomeWrapperState createState() => _StudentHomeWrapperState();
+  _HomeWrapperState createState() => _HomeWrapperState();
 }
 
-class _StudentHomeWrapperState extends State<StudentHomeWrapper> {
+class _HomeWrapperState extends State<HomeWrapper> {
   int _selectedIndex = 0;
+  late String userType;
 
-  final List<Widget> _screens = [
-    const StudentHomeScreen(),
-    const UpcomingScheduleScreen(),
-    const InboxScreen(),
-    const ProfileScreen(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userType = ModalRoute.of(context)!.settings.arguments
+        as String; // Retrieve userType
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = userType == 'student'
+        ? [
+            const StudentHomeScreen(),
+            const UpcomingScheduleScreen(),
+            const InboxScreen(),
+            const ProfileScreen(),
+          ]
+        : [
+            const TutorHomeScreen(), // Ensure TutorHomeScreen is defined
+            const UpcomingScheduleScreen(),
+            const InboxScreen(),
+            const ProfileScreen(),
+          ];
+
     return Scaffold(
       backgroundColor: whiteColor,
-      body: SafeArea(child: _screens[_selectedIndex]),
+      body: SafeArea(child: screens[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         backgroundColor: whiteColor,
         selectedItemColor: lightBlueColor,
         unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
