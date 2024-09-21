@@ -28,7 +28,7 @@ class MissedSchedulesScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height *
-                    0.2, // Set the height of each item
+                    0.22, // Set the height of each item
                 child: AppointedTutorCard(
                   onTap: () {},
                   name: 'Engr. Sarfaraz',

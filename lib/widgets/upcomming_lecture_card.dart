@@ -8,8 +8,10 @@ class UpcommingLectureCard extends StatelessWidget {
   final String subjects;
   final String availableDays;
   final String availableTime;
+  final VoidCallback onTap;
   const UpcommingLectureCard(
       {required this.name,
+      required this.onTap,
       required this.availableDays,
       required this.availableTime,
       required this.subjects,
@@ -61,7 +63,7 @@ class UpcommingLectureCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: onTap,
                     icon: const Icon(
                       Icons.keyboard_arrow_right_sharp,
                       color: whiteColor,

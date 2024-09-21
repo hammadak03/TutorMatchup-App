@@ -229,17 +229,16 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen> {
         backgroundColor: whiteColor,
         centerTitle: true,
         actions: [
-          if (userRole == 'student')
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.completedSchedules);
-              },
-              child: const CustomTextWidget(
-                text: 'Completed',
-                fontSize: 12,
-                textColor: Color(0xFF8696BB),
-              ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.completedSchedules);
+            },
+            child: const CustomTextWidget(
+              text: 'Completed',
+              fontSize: 12,
+              textColor: Color(0xFF8696BB),
             ),
+          ),
         ],
         leadingWidth: 67,
         leading: TextButton(
@@ -288,8 +287,11 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen> {
       floatingActionButton: userRole == 'tutor' // Show FAB only for tutors
           ? FloatingActionButton(
               onPressed: _showAddSessionDialog,
-              child: const Icon(Icons.add),
               backgroundColor: lightBlueColor,
+              child: const Icon(
+                Icons.add,
+                color: whiteColor,
+              ),
             )
           : null, // Null means no FAB for students
     );

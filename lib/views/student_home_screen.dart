@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
@@ -59,10 +60,14 @@ class StudentHomeScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 4,
                 itemBuilder: (context, index) {
-                  return const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
                     child: UpcommingLectureCard(
+                        onTap: () {
+                          //TODO: Pass class session data as arguements to classSession screen.
+                          Navigator.pushNamed(context, Routes.classSession);
+                        },
                         name: 'Ahmed',
                         availableDays: 'Monday-Tuesday',
                         availableTime: '5:00 - 6:00 pm',

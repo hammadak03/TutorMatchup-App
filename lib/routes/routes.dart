@@ -5,6 +5,7 @@ import 'package:tutor_matchup/views/class_session_screen.dart';
 import 'package:tutor_matchup/views/completed_schedules_screen.dart';
 import 'package:tutor_matchup/views/home_screen_wrapper.dart';
 import 'package:tutor_matchup/views/missed_schedules_screen.dart';
+import 'package:tutor_matchup/views/splash_screen.dart';
 import 'package:tutor_matchup/views/student_home_screen.dart';
 import 'package:tutor_matchup/views/login_screen.dart';
 import 'package:tutor_matchup/views/registeration_screen.dart';
@@ -15,7 +16,8 @@ import 'package:tutor_matchup/views/upcoming_schedule_screen.dart';
 import 'package:tutor_matchup/views/user_guidelines_screen.dart';
 
 class Routes {
-  static const String login = '/';
+  static const String splash = '/';
+  static const String login = '/login';
   static const String registeration = '/registeration';
   static const String tutorRegisteration = '/tutorRegisteration';
   static const String studentRegisteration = '/studentRegisteration';
@@ -31,6 +33,7 @@ class Routes {
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
+  Routes.splash: (context) => const SplashScreen(),
   Routes.login: (context) => const LoginScreen(),
   Routes.registeration: (context) => const RegisterationScreen(),
   Routes.tutorRegisteration: (context) => const TutorRegistrationScreen(),

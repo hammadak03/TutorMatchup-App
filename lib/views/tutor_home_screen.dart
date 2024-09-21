@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import 'package:tutor_matchup/widgets/lecture_request_card.dart';
@@ -81,6 +82,10 @@ class _TutorHomeScreenState extends State<TutorHomeScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4.0),
                     child: UpcommingLectureCard(
+                      onTap: () {
+                        //TODO: Pass class session data as arguements to class session screen.
+                        Navigator.pushNamed(context, Routes.classSession);
+                      },
                       name: 'Class ${index + 1}',
                       availableDays: 'Monday, 16 Sept',
                       availableTime: '${index + 1}:00 - ${index + 2}:00 pm',
