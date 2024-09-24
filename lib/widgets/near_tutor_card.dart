@@ -8,10 +8,12 @@ class NearTutorCard extends StatelessWidget {
   final String location;
   final String reviews;
   final String opensAt;
+  final VoidCallback onPressed;
   const NearTutorCard(
       {required this.name,
       required this.reviews,
       required this.location,
+      required this.onPressed,
       required this.opensAt,
       required this.subjects,
       super.key});
@@ -71,7 +73,14 @@ class NearTutorCard extends StatelessWidget {
                         text: location,
                         textColor: coolGrayColor,
                         fontSize: 14,
-                      )
+                      ),
+                      IconButton(
+                        onPressed: onPressed,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_right_sharp,
+                          color: coolGrayColor,
+                        ),
+                      ),
                     ],
                   ),
                 ),

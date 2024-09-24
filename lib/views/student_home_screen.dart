@@ -133,15 +133,19 @@ class StudentHomeScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 6,
                 itemBuilder: (context, index) {
-                  return const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
                     child: NearTutorCard(
-                        name: 'Mamtaz Pawnar',
-                        reviews: '4.8 (120 Reviews)',
-                        location: '1.8 Km',
-                        opensAt: 'Open at 4:00pm',
-                        subjects: 'Physics Specialist'),
+                      name: 'Mamtaz Pawnar',
+                      reviews: '4.8 (120 Reviews)',
+                      location: '1.8 Km',
+                      opensAt: 'Open at 4:00pm',
+                      subjects: 'Physics Specialist',
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.tutorDetails);
+                      },
+                    ),
                   );
                 },
               ),

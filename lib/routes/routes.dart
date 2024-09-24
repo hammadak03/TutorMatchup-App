@@ -10,6 +10,7 @@ import 'package:tutor_matchup/views/student_home_screen.dart';
 import 'package:tutor_matchup/views/login_screen.dart';
 import 'package:tutor_matchup/views/registeration_screen.dart';
 import 'package:tutor_matchup/views/student_registration_screen.dart';
+import 'package:tutor_matchup/views/tutor_details_sceens.dart';
 import 'package:tutor_matchup/views/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/tutor_registration_screen.dart';
 import 'package:tutor_matchup/views/upcoming_schedule_screen.dart';
@@ -30,6 +31,7 @@ class Routes {
   static const String homeWrapper = '/homeWrapper';
   static const String tutorHome = '/tutorHome';
   static const String classSession = '/classSession';
+  static const String tutorDetails = '/tutorDetails';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -47,4 +49,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.homeWrapper: (context) => const HomeWrapper(),
   Routes.tutorHome: (context) => const TutorHomeScreen(),
   Routes.classSession: (context) => const ClassSessionScreen(),
+  Routes.tutorDetails: (context) => const TutorDetailsSceens(),
 };

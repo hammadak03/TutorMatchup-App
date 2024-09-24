@@ -83,7 +83,7 @@ class UpcommingLectureCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.calendar_month,
                       color: whiteColor,
                     ),
