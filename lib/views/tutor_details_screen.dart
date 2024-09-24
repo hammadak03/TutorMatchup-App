@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
-import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
 class TutorDetailsSceens extends StatelessWidget {

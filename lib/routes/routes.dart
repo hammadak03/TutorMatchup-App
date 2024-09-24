@@ -10,7 +10,7 @@ import 'package:tutor_matchup/views/student_home_screen.dart';
 import 'package:tutor_matchup/views/login_screen.dart';
 import 'package:tutor_matchup/views/registeration_screen.dart';
 import 'package:tutor_matchup/views/student_registration_screen.dart';
-import 'package:tutor_matchup/views/tutor_details_sceens.dart';
+import 'package:tutor_matchup/views/tutor_details_screen.dart';
 import 'package:tutor_matchup/views/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/tutor_registration_screen.dart';
 import 'package:tutor_matchup/views/upcoming_schedule_screen.dart';
