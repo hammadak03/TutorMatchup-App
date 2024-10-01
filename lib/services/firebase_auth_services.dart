@@ -5,7 +5,6 @@ class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Unified sign-up method for both tutors and students
   Future<User?> signUp({
     required String email,
     required String password,
@@ -33,37 +32,37 @@ class FirebaseAuthService {
       User? user = userCredential.user;
 
       if (user != null) {
-        // Save the common and additional user information to Firestore
+        // Save the common user data
         final Map<String, Object> userData = {
+          'uid': user.uid,
           'email': email,
           'name': name,
           'userType': userType,
           'createdAt': FieldValue.serverTimestamp(),
         };
 
-        // Add tutor-specific fields if the user is a tutor
+        // Save to specific collection
         if (userType == 'tutor') {
-          if (phoneNo != null) userData['phoneNo'] = phoneNo;
-          if (education != null) userData['education'] = education;
-          if (availability != null) userData['availability'] = availability;
-          if (experience != null) userData['experience'] = experience;
-          if (subjects != null) userData['subjects'] = subjects;
-          if (resume != null) userData['resume'] = resume;
+          await _firestore.collection('tutors').doc(user.uid).set({
+            ...userData,
+            'phoneNo': phoneNo,
+            'education': education,
+            'availability': availability,
+            'experience': experience,
+            'subjects': subjects,
+            'resume': resume,
+          });
+        } else if (userType == 'student') {
+          await _firestore.collection('students').doc(user.uid).set({
+            ...userData,
+            'institute': institute,
+            'year': year,
+            'learningFormat': learningFormat,
+            'preferredDays': preferredDays,
+            'preferredTime': preferredTime,
+            'resume': resume,
+          });
         }
-
-        // Add student-specific fields if the user is a student
-        else if (userType == 'student') {
-          if (institute != null) userData['institute'] = institute;
-          if (year != null) userData['year'] = year;
-          if (learningFormat != null)
-            userData['learningFormat'] = learningFormat;
-          if (preferredDays != null) userData['preferredDays'] = preferredDays;
-          if (preferredTime != null) userData['preferredTime'] = preferredTime;
-          if (resume != null) userData['resume'] = resume;
-        }
-
-        // Save the data in the 'users' collection
-        await _firestore.collection('users').doc(user.uid).set(userData);
       }
 
       return user;

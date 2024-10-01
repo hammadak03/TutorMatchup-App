@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/views/chat_screen.dart';
 import 'package:tutor_matchup/views/class_session_screen.dart';
 import 'package:tutor_matchup/views/completed_schedules_screen.dart';
+import 'package:tutor_matchup/views/forgot_password_screen.dart';
 import 'package:tutor_matchup/views/home_screen_wrapper.dart';
 import 'package:tutor_matchup/views/missed_schedules_screen.dart';
 import 'package:tutor_matchup/views/splash_screen.dart';
@@ -32,6 +33,7 @@ class Routes {
   static const String tutorHome = '/tutorHome';
   static const String classSession = '/classSession';
   static const String tutorDetails = '/tutorDetails';
+  static const String forgotPassword = '/forgotPassword';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -50,4 +52,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.tutorHome: (context) => const TutorHomeScreen(),
   Routes.classSession: (context) => const ClassSessionScreen(),
   Routes.tutorDetails: (context) => const TutorDetailsSceens(),
+  Routes.forgotPassword: (context) => const ForgotPasswordScreen(),
 };

@@ -65,7 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 RememberMeCheckbox(onChanged: (value) {}),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.forgotPassword);
+                  },
                   child: const CustomTextWidget(
                     text: 'Forgot Password?',
                     textColor: lightCoralColor,
@@ -90,13 +92,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         await authService.login(
                             emailController.text, passwordController.text);
                         String userId = FirebaseAuth.instance.currentUser!.uid;
-                        DocumentSnapshot userDoc = await FirebaseFirestore
-                            .instance
-                            .collection('users')
+                        DocumentSnapshot userDoc;
+
+// Check if the user exists in tutors collection
+                        userDoc = await FirebaseFirestore.instance
+                            .collection('tutors')
                             .doc(userId)
                             .get();
+                        if (!userDoc.exists) {
+                          // Check if the user exists in students collection
+                          userDoc = await FirebaseFirestore.instance
+                              .collection('students')
+                              .doc(userId)
+                              .get();
+                        }
+
                         String userType = userDoc['userType'];
-                        // After successful login
+// Redirect to the appropriate screen based on userType
                         if (userType == 'student') {
                           Navigator.pushReplacementNamed(
                             context,
@@ -110,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             arguments: 'tutor',
                           );
                         } else {
-                          // Handle the case if the userType is missing or invalid
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Unknown user type')),
                           );

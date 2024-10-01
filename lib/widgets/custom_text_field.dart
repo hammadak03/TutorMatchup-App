@@ -9,6 +9,8 @@ class CustomTextField extends StatefulWidget {
   final IconButton? suffixIcon;
   final Icon? prefixIcon;
   final TextEditingController? controller;
+  final VoidCallback? onTap; // Add onTap callback for interaction
+  final bool readOnly; // Add readOnly to make the field non-editable
 
   const CustomTextField({
     this.controller,
@@ -17,6 +19,8 @@ class CustomTextField extends StatefulWidget {
     required this.hintText,
     this.labelText,
     this.prefixIcon,
+    this.onTap,
+    this.readOnly = false, // Default to false to allow typing
     super.key,
   });
 
@@ -51,6 +55,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           TextField(
             controller: widget.controller,
             obscureText: widget.suffixIcon != null ? _obscureText : false,
+            readOnly: widget.readOnly, // Set to true for non-editable fields
+            onTap: widget.onTap, // Call the onTap method when tapped
             decoration: InputDecoration(
               prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,

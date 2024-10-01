@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
@@ -5,22 +7,179 @@ import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
-class StudentRegistrationScreen extends StatelessWidget {
+class StudentRegistrationScreen extends StatefulWidget {
   const StudentRegistrationScreen({super.key});
 
   @override
+  State<StudentRegistrationScreen> createState() =>
+      _StudentRegistrationScreenState();
+}
+
+class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController instituteController = TextEditingController();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController learningFormatController =
+      TextEditingController();
+  final TextEditingController preferredDaysController = TextEditingController();
+  final TextEditingController preferredTimeController = TextEditingController();
+
+  // Options for dropdowns and checkboxes
+  final List<String> grades = [
+    'Grade 1',
+    'Grade 2',
+    'Grade 3',
+    'Grade 4',
+    'Grade 5',
+    'Grade 6',
+    'Grade 7',
+    'Grade 8',
+    'SSC-1',
+    'SSC-2',
+    'HSC-1',
+    'HSC-2'
+  ];
+  final List<String> learningFormats = ['In-Person', 'Online', 'Hybrid'];
+  final List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday'
+  ];
+
+  // Variables to store user selections
+  String? selectedGrade;
+  String? selectedLearningFormat;
+  List<String> selectedDays = [];
+  TimeOfDay? selectedTime;
+
+  // Method to select a time using the time picker
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (pickedTime != null) {
+      setState(() {
+        selectedTime = pickedTime;
+        preferredTimeController.text = pickedTime.format(context);
+      });
+    }
+  }
+
+  // Dropdown for Grade/Year selection
+  void _showGradeDropdown() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) => ListView(
+        children: grades.map((grade) {
+          return ListTile(
+            title: CustomTextWidget(
+              text: grade,
+              textColor: blackColor,
+            ),
+            onTap: () {
+              setState(() {
+                selectedGrade = grade;
+                yearController.text = grade;
+              });
+              Navigator.pop(context);
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // Dropdown for Learning Format selection
+  void _showLearningFormatDropdown() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) => ListView(
+        children: learningFormats.map((format) {
+          return ListTile(
+            title: CustomTextWidget(
+              text: format,
+              textColor: blackColor,
+            ),
+            onTap: () {
+              setState(() {
+                selectedLearningFormat = format;
+                learningFormatController.text = format;
+              });
+              Navigator.pop(context);
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // Modal for Preferred Days selection (multiple selection)
+  void _showDaySelectionModal() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CustomTextWidget(
+                    text: 'Select Preferred Days',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    textColor: blackColor,
+                  ),
+                ),
+                ...days.map((day) {
+                  bool isSelected = selectedDays.contains(day);
+                  return CheckboxListTile(
+                    title: CustomTextWidget(
+                      text: day,
+                      textColor: blackColor,
+                    ),
+                    value: isSelected,
+                    onChanged: (bool? value) {
+                      setStateModal(() {
+                        if (value == true) {
+                          selectedDays.add(day);
+                        } else {
+                          selectedDays.remove(day);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      preferredDaysController.text = selectedDays.join(', ');
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const CustomTextWidget(
+                    text: 'Confirm',
+                    textColor: lightBlueColor,
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController instituteController = TextEditingController();
-    final TextEditingController yearController = TextEditingController();
-    final TextEditingController learningFormatController =
-        TextEditingController();
-    final TextEditingController preferredDaysController =
-        TextEditingController();
-    final TextEditingController preferredTimeController =
-        TextEditingController();
     return Scaffold(
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
@@ -58,21 +217,37 @@ class StudentRegistrationScreen extends StatelessWidget {
               controller: instituteController,
               hintText: 'School/College/University',
             ),
+
+            // Grade/Year field with dropdown
             CustomTextField(
               controller: yearController,
               hintText: 'Grade/Year',
+              onTap: _showGradeDropdown,
+              readOnly: true,
             ),
+
+            // Learning Format field with dropdown
             CustomTextField(
               controller: learningFormatController,
               hintText: 'Learning Format',
+              onTap: _showLearningFormatDropdown,
+              readOnly: true,
             ),
+
+            // Preferred Days field with multiple selection modal
             CustomTextField(
               controller: preferredDaysController,
               hintText: 'Preferred Days',
+              onTap: _showDaySelectionModal,
+              readOnly: true,
             ),
+
+            // Preferred Time field with clock
             CustomTextField(
               controller: preferredTimeController,
               hintText: 'Preferred Time',
+              onTap: () => _selectTime(context),
+              readOnly: true,
             ),
             const SizedBox(
               height: 20,
