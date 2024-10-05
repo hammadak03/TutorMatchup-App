@@ -25,16 +25,58 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final TextEditingController availabilityController = TextEditingController();
   final TextEditingController experienceController = TextEditingController();
   final TextEditingController subjectsController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+
+  final TextEditingController othersEducationController =
+      TextEditingController();
 
   String? selectedEducation;
+  bool isOthersSelected = false; // Track if "Others" is selected
   File? resumeFile;
+  List<String> selectedDays = [];
   bool isUploading = false;
 
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+
+  // Method to select both start and end times
+  Future<void> _selectTimeRange(BuildContext context) async {
+    final TimeOfDay? pickedStartTime =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (pickedStartTime != null) {
+      final TimeOfDay? pickedEndTime =
+          await showTimePicker(context: context, initialTime: pickedStartTime);
+      if (pickedEndTime != null) {
+        setState(() {
+          startTime = pickedStartTime;
+          endTime = pickedEndTime;
+          timeController.text =
+              '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
+        });
+      }
+    }
+  }
+
   final List<String> educationLevels = [
-    'BE',
-    'MSc',
+    'Matriculation',
+    'Intermediate',
+    'Bachelor\'s Degree',
+    'Master\'s Degree',
+    'MPhil',
     'PhD',
-    'Other',
+    'Teaching Certificate',
+    'Professional Certifications',
+    'Dars-e-Nizami',
+    'Alim/Alima',
+    'Others',
+  ];
+
+  final List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday'
   ];
 
   // Function to upload resume
@@ -79,6 +121,65 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
         resumeFile = File(result.files.single.path!);
       });
     }
+  }
+
+  void _showDaySelectionModal() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CustomTextWidget(
+                    text: 'Select Preferred Days',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    textColor: blackColor,
+                  ),
+                ),
+                ...days.map((day) {
+                  bool isSelected = selectedDays.contains(day);
+                  return CheckboxListTile(
+                    title: CustomTextWidget(
+                      text: day,
+                      textColor: blackColor,
+                    ),
+                    value: isSelected,
+                    onChanged: (bool? value) {
+                      setStateModal(() {
+                        if (value == true) {
+                          selectedDays.add(day);
+                        } else {
+                          selectedDays.remove(day);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      availabilityController.text = selectedDays.join(', ');
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const CustomTextWidget(
+                    text: 'Confirm',
+                    textColor: lightBlueColor,
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -126,31 +227,50 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
               child: DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   hintText: 'Highest Level of Education',
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 15, // Increased padding for height consistency
+                    horizontal: 16,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     borderSide: const BorderSide(),
                   ),
                 ),
                 value: selectedEducation,
-                items: educationLevels
-                    .map((level) => DropdownMenuItem<String>(
-                          value: level,
-                          child: Text(level),
-                        ))
-                    .toList(),
+                items: educationLevels.map((level) {
+                  return DropdownMenuItem<String>(
+                    value: level,
+                    child: Text(level),
+                  );
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
                     selectedEducation = value;
+                    isOthersSelected =
+                        value == 'Others'; // Check if "Others" is selected
                   });
                 },
               ),
             ),
 
+            // Show custom TextField when "Others" is selected
+            if (isOthersSelected)
+              CustomTextField(
+                controller: othersEducationController,
+                hintText: 'Please specify your highest education',
+              ),
+
             CustomTextField(
               controller: availabilityController,
               hintText: 'Availability',
+              onTap: _showDaySelectionModal,
+              readOnly: true,
+            ),
+            CustomTextField(
+              controller: timeController,
+              hintText: 'Preferred Time Range',
+              onTap: () => _selectTimeRange(context),
+              readOnly: true,
             ),
             CustomTextField(
               controller: experienceController,
@@ -201,67 +321,23 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                     phoneNoController.text.isNotEmpty &&
                     selectedEducation != null &&
                     availabilityController.text.isNotEmpty &&
-                    experienceController.text.isNotEmpty &&
+                    timeController.text.isNotEmpty &&
                     subjectsController.text.isNotEmpty) {
                   String? resumeUrl = await _uploadResume();
-
-                  Navigator.pushNamed(
-                    context,
-                    Routes.userGuidelines,
-                    arguments: {
-                      'userType': 'tutor',
-                      'name': nameController.text,
-                      'email': emailController.text,
-                      'password': passwordController.text,
-                      'phoneNo': phoneNoController.text,
-                      'education': selectedEducation,
-                      'availability': availabilityController.text,
-                      'experience': experienceController.text,
-                      'subjects': subjectsController.text,
-                      'resumeUrl': resumeUrl,
-                    },
-                  );
+                  // Call your registration API or Firebase function here
                 } else {
-                  // Handle empty fields, show a message
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill in all fields.'),
+                    ),
+                  );
                 }
               },
-              buttonText: 'Create Account',
+              buttonText: 'Register',
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.login);
-              },
-              child: const CustomTextWidget(
-                text: 'Already have account?',
-                textColor: blackColor,
-                fontSize: 18,
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text.rich(
-                TextSpan(
-                  text: 'By clicking "Create Account" you agree to our ',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'terms ',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    TextSpan(
-                      text: 'and ',
-                    ),
-                    TextSpan(
-                      text: 'privacy policy.',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ],
-                ),
-              ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),
