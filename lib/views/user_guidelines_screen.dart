@@ -14,31 +14,31 @@ class UserGuidelinesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Retrieve the passed data
     final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    final String userType = arguments['userType']!;
+        ModalRoute.of(context)!.settings.arguments as Map<String, String?>;
 
-    // Common fields for both user types
-    final String name = arguments['name']!;
-    final String email = arguments['email']!;
-    final String password = arguments['password']!;
+    final String userType = arguments['userType'] ?? 'unknown';
+    final String name = arguments['name'] ?? 'Guest';
+    final String email = arguments['email'] ?? 'example@example.com';
+    final String password = arguments['password'] ?? 'defaultPassword';
 
     // Specific fields based on user type
     late String institute, year, learningFormat, preferredDays, preferredTime;
-    late String phoneNo, education, availability, experience, subjects, resume;
+    late String phoneNo, education, availability, experience, subjects;
+    String? resume;
 
     if (userType == 'student') {
-      institute = arguments['institute']!;
-      year = arguments['year']!;
-      learningFormat = arguments['learningFormat']!;
-      preferredDays = arguments['preferredDays']!;
-      preferredTime = arguments['preferredTime']!;
+      institute = arguments['institute'] ?? '';
+      year = arguments['year'] ?? '';
+      learningFormat = arguments['learningFormat'] ?? '';
+      preferredDays = arguments['preferredDays'] ?? '';
+      preferredTime = arguments['preferredTime'] ?? '';
     } else if (userType == 'tutor') {
-      phoneNo = arguments['phoneNo']!;
-      education = arguments['education']!;
-      availability = arguments['availability']!;
-      experience = arguments['experience']!;
-      subjects = arguments['subjects']!;
-      resume = arguments['resume']!;
+      phoneNo = arguments['phoneNo'] ?? '';
+      education = arguments['education'] ?? '';
+      availability = arguments['availability'] ?? '';
+      experience = arguments['experience'] ?? '';
+      subjects = arguments['subjects'] ?? '';
+      resume = arguments['resume']; // This can remain null if not provided
     }
 
     return Scaffold(
@@ -99,6 +99,13 @@ class UserGuidelinesScreen extends StatelessWidget {
               child: AgreeButtonWithCheckbox(
                 onCheckboxChanged: (value) {},
                 onButtonTap: () async {
+                  if (userType == 'unknown') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Unknown user type')),
+                    );
+                    return;
+                  }
+
                   try {
                     final FirebaseAuthService authService =
                         FirebaseAuthService();
@@ -144,6 +151,9 @@ class UserGuidelinesScreen extends StatelessWidget {
                     }
                   } catch (e) {
                     // Handle the error, e.g., show a Snackbar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${e.toString()}')),
+                    );
                   }
                 },
                 text: 'Agree Terms & Conditions?',
@@ -171,7 +181,6 @@ class AgreeButtonWithCheckbox extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _AgreeButtonWithCheckboxState createState() =>
       _AgreeButtonWithCheckboxState();
 }
@@ -256,12 +265,15 @@ class _AgreeButtonWithCheckboxState extends State<AgreeButtonWithCheckbox> {
                 checkColor: Colors.black, // Black check mark color
               ),
             ),
-            Text(
-              widget.text,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: whiteColor,
+            Expanded(
+              // Ensure text wraps correctly
+              child: Text(
+                widget.text,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: whiteColor,
+                ),
               ),
             ),
           ],

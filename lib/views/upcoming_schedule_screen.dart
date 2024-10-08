@@ -255,7 +255,7 @@ class _UpcomingScheduleScreenState extends State<UpcomingScheduleScreen> {
           text: 'Upcoming Schedule',
           textColor: lightBlueColor,
           fontWeight: FontWeight.w500,
-          fontSize: 16,
+          fontSize: 17,
         ),
       ),
       backgroundColor: whiteColor,
