@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../utils/colors.dart';
-import '../widgets/appointed_tutor_card.dart';
-import '../widgets/custom_text_widget.dart';
+import 'package:tutor_matchup/widgets/appointed_tutor_card.dart';
+import '../../utils/colors.dart';
+import '../../widgets/custom_text_widget.dart';
 
-class CompletedSchedulesScreen extends StatelessWidget {
-  const CompletedSchedulesScreen({super.key});
+class MissedSchedulesScreen extends StatelessWidget {
+  const MissedSchedulesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CompletedSchedulesScreen extends StatelessWidget {
         backgroundColor: whiteColor,
         centerTitle: true,
         title: const CustomTextWidget(
-          text: 'Completed Schedules',
+          text: 'Missed Schedules',
           textColor: lightBlueColor,
           fontWeight: FontWeight.w500,
           fontSize: 16,

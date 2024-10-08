@@ -5,7 +5,7 @@ import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
-import '../services/firebase_auth_services.dart';
+import '../../services/firebase_auth_services.dart';
 
 class UserGuidelinesScreen extends StatelessWidget {
   const UserGuidelinesScreen({super.key});

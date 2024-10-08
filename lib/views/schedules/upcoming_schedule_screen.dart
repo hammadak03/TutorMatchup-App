@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tutor_matchup/widgets/appointed_tutor_card.dart';
-import '../utils/colors.dart';
-import '../widgets/custom_text_widget.dart';
+import '../../utils/colors.dart';
+import '../../widgets/custom_text_widget.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
-import '../routes/routes.dart';
-import '../services/firebase_auth_services.dart';
+import '../../routes/routes.dart';
+import '../../services/firebase_auth_services.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

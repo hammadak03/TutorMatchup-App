@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
-import 'package:tutor_matchup/views/inbox_screen.dart';
-import 'package:tutor_matchup/views/profile_screen.dart';
+import 'package:tutor_matchup/views/messages/inbox_screen.dart';
+import 'package:tutor_matchup/views/profile/profile_screen.dart';
 import 'student_home_screen.dart';
 import 'tutor_home_screen.dart'; // Import the Tutor Home Screen
-import 'upcoming_schedule_screen.dart';
+import '../schedules/upcoming_schedule_screen.dart';
 
 class HomeWrapper extends StatefulWidget {
   const HomeWrapper({super.key});

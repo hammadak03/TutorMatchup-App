@@ -1,21 +1,21 @@
 // routes.dart
 import 'package:flutter/material.dart';
-import 'package:tutor_matchup/views/chat_screen.dart';
-import 'package:tutor_matchup/views/class_session_screen.dart';
-import 'package:tutor_matchup/views/completed_schedules_screen.dart';
-import 'package:tutor_matchup/views/forgot_password_screen.dart';
-import 'package:tutor_matchup/views/home_screen_wrapper.dart';
-import 'package:tutor_matchup/views/missed_schedules_screen.dart';
-import 'package:tutor_matchup/views/splash_screen.dart';
-import 'package:tutor_matchup/views/student_home_screen.dart';
-import 'package:tutor_matchup/views/login_screen.dart';
-import 'package:tutor_matchup/views/registeration_screen.dart';
-import 'package:tutor_matchup/views/student_registration_screen.dart';
-import 'package:tutor_matchup/views/tutor_details_screen.dart';
-import 'package:tutor_matchup/views/tutor_home_screen.dart';
-import 'package:tutor_matchup/views/tutor_registration_screen.dart';
-import 'package:tutor_matchup/views/upcoming_schedule_screen.dart';
-import 'package:tutor_matchup/views/user_guidelines_screen.dart';
+import 'package:tutor_matchup/views/messages/chat_screen.dart';
+import 'package:tutor_matchup/views/schedules/class_session_screen.dart';
+import 'package:tutor_matchup/views/schedules/completed_schedules_screen.dart';
+import 'package:tutor_matchup/views/auth/forgot_password_screen.dart';
+import 'package:tutor_matchup/views/home/home_screen_wrapper.dart';
+import 'package:tutor_matchup/views/schedules/missed_schedules_screen.dart';
+import 'package:tutor_matchup/views/onboarding/splash_screen.dart';
+import 'package:tutor_matchup/views/home/student_home_screen.dart';
+import 'package:tutor_matchup/views/auth/login_screen.dart';
+import 'package:tutor_matchup/views/onboarding/registeration_screen.dart';
+import 'package:tutor_matchup/views/auth/student_registration_screen.dart';
+import 'package:tutor_matchup/views/profile/tutor_details_screen.dart';
+import 'package:tutor_matchup/views/home/tutor_home_screen.dart';
+import 'package:tutor_matchup/views/auth/tutor_registration_screen.dart';
+import 'package:tutor_matchup/views/schedules/upcoming_schedule_screen.dart';
+import 'package:tutor_matchup/views/auth/user_guidelines_screen.dart';
 
 class Routes {
   static const String splash = '/';

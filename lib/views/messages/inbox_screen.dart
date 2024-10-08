@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
-import '../models/message_model.dart';
+import '../../models/message_model.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 
 class InboxScreen extends StatelessWidget {
