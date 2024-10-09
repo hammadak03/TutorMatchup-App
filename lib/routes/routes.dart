@@ -35,7 +35,7 @@ class Routes {
   static const String classSession = '/classSession';
   static const String tutorDetails = '/tutorDetails';
   static const String forgotPassword = '/forgotPassword';
-  static const String searchResults = '/forgotPassword';
+  static const String searchResults = '/searchResults';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
