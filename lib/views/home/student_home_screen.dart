@@ -79,9 +79,12 @@ class StudentHomeScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const CustomTextField(
+            CustomTextField(
               hintText: 'Search tutor or Subjects',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
+              onTap: () {
+                Navigator.pushNamed(context, Routes.searchResults);
+              },
             ),
             const SizedBox(
               height: 10,
@@ -130,6 +133,7 @@ class StudentHomeScreen extends StatelessWidget {
               height: 20,
             ),
             Expanded(
+              //TODO: Wrap around Future builder when working on backend, and create future function
               child: ListView.builder(
                 itemCount: 6,
                 itemBuilder: (context, index) {
