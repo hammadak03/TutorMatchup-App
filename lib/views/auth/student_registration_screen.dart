@@ -22,7 +22,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   final TextEditingController instituteController = TextEditingController();
   final TextEditingController yearController = TextEditingController();
   final TextEditingController learningFormatController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController preferredDaysController = TextEditingController();
   final TextEditingController preferredTimeController = TextEditingController();
 
@@ -59,7 +59,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   // Method to select a time using the time picker
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (pickedTime != null) {
       setState(() {
         selectedTime = pickedTime;
@@ -156,7 +156,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
@@ -297,7 +297,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text.rich(
                 TextSpan(
-                  text: 'By clicking \"Create Account" you agree to our ',
+                  text: 'By clicking "Create Account" you agree to our ',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +11,7 @@ import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class TutorRegistrationScreen extends StatefulWidget {
   const TutorRegistrationScreen({super.key});
@@ -30,6 +33,11 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final TextEditingController othersEducationController =
       TextEditingController();
 
+  List<String> subjects = [];
+  late String selectedSubject;
+  bool showOtherField = false;
+  TextEditingController otherSubjectController = TextEditingController();
+
   String? selectedEducation;
   bool isOthersSelected = false;
   File? resumeFile;
@@ -40,6 +48,20 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   TimeOfDay? endTime;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState(){
+    super.initState();
+    loadSubjects();
+  }
+
+  Future<void> loadSubjects() async {
+    final String response = await rootBundle.loadString('assets/subjects.json');
+    final List<dynamic> data = json.decode(response);
+    setState(() {
+      subjects = data.cast<String>();
+    });
+  }
 
   Future<void> _selectTimeRange(BuildContext context) async {
     final TimeOfDay? pickedStartTime = await showTimePicker(
@@ -116,7 +138,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   Future<void> _pickResumeFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpg', 'png'],
+      allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
     );
 
     if (result != null) {
@@ -259,11 +281,30 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
               controller: experienceController,
               hintText: 'Previous Experience',
             ),
-            CustomTextField(
-              controller: subjectsController,
-              hintText: 'Subjects Want to Teach',
+            Text('Subjects want to teach:'),
+            Wrap(
+              spacing: 8.0,
+              children: subjects.map((subject) {
+                return ChoiceChip(
+                  label: Text(subject),
+                  selected: selectedSubject == subject,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      selectedSubject = (selected ? subject : null)!;
+                      showOtherField = selected && subject == "Others";
+                    });
+                  },
+                );
+              }).toList(),
             ),
-            const SizedBox(height: 5),
+            if (showOtherField)
+              TextField(
+                controller: otherSubjectController,
+                decoration: InputDecoration(
+                  labelText: 'Please specify other subject',
+                ),
+              ),
+      const SizedBox(height: 5),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: InkWell(
@@ -302,10 +343,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                     },
             ),
             const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
+        ],),));
   }
 
   void _showDaySelectionModal() {
@@ -345,7 +383,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
