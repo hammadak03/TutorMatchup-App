@@ -34,7 +34,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
       TextEditingController();
 
   List<String> subjects = [];
-  late String selectedSubject;
+  Set<String> selectedSubjects = {};
   bool showOtherField = false;
   TextEditingController otherSubjectController = TextEditingController();
 
@@ -287,11 +287,15 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
               children: subjects.map((subject) {
                 return ChoiceChip(
                   label: Text(subject),
-                  selected: selectedSubject == subject,
+                  selected: selectedSubjects.contains(subject), // Check if subject is in the Set
                   onSelected: (bool selected) {
                     setState(() {
-                      selectedSubject = (selected ? subject : null)!;
-                      showOtherField = selected && subject == "Others";
+                      if (selected) {
+                        selectedSubjects.add(subject); // Use add on the Set
+                      } else {
+                        selectedSubjects.remove(subject); // Use remove on the Set
+                      }
+                      showOtherField = selectedSubjects.contains("Others"); // Check if "Others" is selected
                     });
                   },
                 );
