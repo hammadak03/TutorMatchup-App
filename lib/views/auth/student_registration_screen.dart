@@ -156,7 +156,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
@@ -297,7 +297,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text.rich(
                 TextSpan(
-                  text: 'By clicking \"Create Account" you agree to our ',
+                  text: 'By clicking "Create Account" you agree to our ',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,

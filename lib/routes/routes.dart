@@ -16,7 +16,7 @@ import 'package:tutor_matchup/views/home/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/auth/tutor_registration_screen.dart';
 import 'package:tutor_matchup/views/schedules/upcoming_schedule_screen.dart';
 import 'package:tutor_matchup/views/auth/user_guidelines_screen.dart';
-import 'package:tutor_matchup/views/search/search_results_screen.dart';
+//import 'package:tutor_matchup/views/search/search_results_screen.dart';
 
 class Routes {
   static const String splash = '/';
@@ -55,5 +55,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.classSession: (context) => const ClassSessionScreen(),
   Routes.tutorDetails: (context) => const TutorDetailsSceens(),
   Routes.forgotPassword: (context) => const ForgotPasswordScreen(),
-  Routes.searchResults: (context) => const SearchResultScreen(),
+  //Routes.searchResults: (context) => const SearchResultScreen(),
 };

@@ -32,6 +32,7 @@ flutter:
     - assets/images/tutormatchup_logo.png
     - assets/images/facebook_logo.png
     - assets/images/google_logo.png
+    - assets/subjects.json
 
   fonts:
     - family: Poppins
