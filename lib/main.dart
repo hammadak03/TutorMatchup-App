@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/firebase_options.dart';
 import 'package:tutor_matchup/routes/routes.dart';
-//this is khanida :)
+//testing 123
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
