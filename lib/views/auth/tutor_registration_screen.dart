@@ -116,7 +116,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   Future<void> _pickResumeFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpg', 'png'],
+      allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
     );
 
     if (result != null) {
