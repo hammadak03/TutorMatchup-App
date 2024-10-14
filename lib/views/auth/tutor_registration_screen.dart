@@ -57,6 +57,65 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
     loadSubjects();
   }
 
+  void _showDaySelectionModal() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CustomTextWidget(
+                    text: 'Select Preferred Days',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    textColor: blackColor,
+                  ),
+                ),
+                ...days.map((day) {
+                  bool isSelected = selectedDays.contains(day);
+                  return CheckboxListTile(
+                    title: CustomTextWidget(
+                      text: day,
+                      textColor: blackColor,
+                    ),
+                    value: isSelected,
+                    onChanged: (bool? value) {
+                      setStateModal(() {
+                        if (value == true) {
+                          selectedDays.add(day);
+                        } else {
+                          selectedDays.remove(day);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      availabilityController.text = selectedDays.join(', ');
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const CustomTextWidget(
+                    text: 'Confirm',
+                    textColor: lightBlueColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> loadSubjects() async {
     final String response = await rootBundle.loadString('assets/subjects.json');
     final List<dynamic> data = json.decode(response);
@@ -399,48 +458,4 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                 ],
               ),
             ); }
-  }
-
-    Step _buildDaySelectionStep(){
-        return Step(
-        title: const Text('Availaibility'),
-        content: StatefulBuilder(
-          builder: (context, setStateModal) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CustomTextWidget(
-                    text: 'Select Preferred Days',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    textColor: blackColor,
-                  ),
-                ),
-                ...days.map((day) {
-                  bool isSelected = selectedDays.contains(day);
-                  return CheckboxListTile(
-                    title: CustomTextWidget(
-                      text: day,
-                      textColor: blackColor,
-                    ),
-                    value: isSelected,
-                    onChanged: (bool? value) {
-                      setStateModal(() {
-                        if (value == true) {
-                          selectedDays.add(day);
-                        } else {
-                          selectedDays.remove(day);
-                        }
-                      availabilityController.text = selectedDays.join(', ');
-                    });
-                  },
-      );
-                  }),
-              ],
-            );
-          },
-        )
-    );
   }
