@@ -31,7 +31,9 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final TextEditingController subjectsController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController othersEducationController =
-      TextEditingController();
+  TextEditingController();
+
+  int _currentStep = 0;
 
   List<String> subjects = [];
   Set<String> selectedSubjects = {};
@@ -78,7 +80,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
           startTime = pickedStartTime;
           endTime = pickedEndTime;
           timeController.text =
-              '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
+          '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
         });
       }
     }
@@ -201,70 +203,119 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            const CustomTextWidget(
-              text: 'Tutor Registration',
-              textColor: blackColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              controller: nameController,
-              hintText: 'Enter Your Name',
-            ),
-            CustomTextField(
-              controller: emailController,
-              hintText: 'Email',
-            ),
-            CustomTextField(
-              controller: passwordController,
-              hintText: 'Password',
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.visibility_off_outlined),
+      appBar: AppBar(
+        title: const Text('Tutor Registration'),
+      ),
+      body: Stepper(
+        currentStep: _currentStep,
+        onStepTapped: (step) => setState(() => _currentStep = step),
+        onStepContinue: () {
+          if (_currentStep < 2) {
+            if (_currentStep == 0 &&
+                (nameController.text.isEmpty || emailController.text.isEmpty ||
+                    passwordController.text.isEmpty)) {
+              // Show error message or snackbar
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please fill in all fields'))
+              );
+              return; // Prevent moving to the next step
+            }
+            setState(() => _currentStep++);
+          } else {
+            _registerAndNavigate();
+          }
+        },
+        onStepCancel:
+        _currentStep > 0 ? () => setState(() => _currentStep--) : null,
+        steps: [
+          _buildSignUpStep(),
+          _buildPersonalInfoStep(),
+        ],
+      ),
+    );
+  }
+            Step _buildSignUpStep() {
+    return Step(
+              title: const Text('Sign Up'),
+              content: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    const CustomTextWidget(
+                      text: 'Tutor Registration',
+                      textColor: blackColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: nameController,
+                      hintText: 'Enter Your Name',
+                    ),
+                    CustomTextField(
+                      controller: emailController,
+                      hintText: 'Email',
+                    ),
+                    CustomTextField(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      suffixIcon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.visibility_off_outlined),
+                      ),
+                    ),
+                    CustomTextField(
+                      controller: phoneNoController,
+                      hintText: 'Phone Number',
+                    ),
+                    CustomButton(
+                      onTap:() {
+                        // Handle sign-up logic (e.g., validation)
+                        // If valid, proceed to the next step
+                        setState(() => _currentStep++);
+                      }, buttonText: 'Sign Up',
+                    ),
+                  ],
               ),
-            ),
-            CustomTextField(
-              controller: phoneNoController,
-              hintText: 'Phone Number',
-            ),
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  hintText: 'Highest Level of Education',
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(),
-                  ),
+            ); }
+
+    Step _buildPersonalInfoStep(){
+            return Step(
+              title: const Text('Personal Info'),
+              content: Column(
+                children: [
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        hintText: 'Highest Level of Education',
+                        contentPadding:
+                          const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(),
+                        ),
+                      ),
+                    value: selectedEducation,
+                    items: educationLevels.map((level) {
+                      return DropdownMenuItem<String>(
+                        value: level,
+                        child: Text(level),
+                      );
+                    }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedEducation = value;
+                      isOthersSelected = value == 'Others';
+                    });
+                  },
                 ),
-                value: selectedEducation,
-                items: educationLevels.map((level) {
-                  return DropdownMenuItem<String>(
-                    value: level,
-                    child: Text(level),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedEducation = value;
-                    isOthersSelected = value == 'Others';
-                  });
-                },
               ),
-            ),
             if (isOthersSelected)
-              CustomTextField(
-                controller: othersEducationController,
-                hintText: 'Please specify your highest education',
-              ),
+            CustomTextField(
+              controller: othersEducationController,
+              hintText: 'Please specify your highest education',
+            ),
             CustomTextField(
               controller: availabilityController,
               hintText: 'Availability',
@@ -283,79 +334,77 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
             ),
             Text('Subjects want to teach:'),
             Wrap(
-              spacing: 8.0,
-              children: subjects.map((subject) {
-                return ChoiceChip(
-                  label: Text(subject),
-                  selected: selectedSubjects.contains(subject), // Check if subject is in the Set
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        selectedSubjects.add(subject); // Use add on the Set
-                      } else {
-                        selectedSubjects.remove(subject); // Use remove on the Set
-                      }
-                      showOtherField = selectedSubjects.contains("Others"); // Check if "Others" is selected
-                    });
-                  },
-                );
-              }).toList(),
+            spacing: 8.0,
+            children: subjects.map((subject) {
+              return ChoiceChip(
+                label: Text(subject),
+                selected: selectedSubjects.contains(subject), // Check if subject is in the Set
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (selected) {
+                      selectedSubjects.add(subject); // Use add on the Set
+                    } else {
+                      selectedSubjects.remove(subject); // Use remove on the Set
+                    }
+                    showOtherField = selectedSubjects.contains("Other"); // Check if "Others" is selected
+                  });
+                },
+              );
+            }).toList(),
+          ),
+        if (showOtherField)
+          TextField(
+            controller: otherSubjectController,
+            decoration: InputDecoration(
+              labelText: 'Please specify other subject',
             ),
-            if (showOtherField)
-              TextField(
-                controller: otherSubjectController,
-                decoration: InputDecoration(
-                  labelText: 'Please specify other subject',
+          ),
+          const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: InkWell(
+              onTap: _pickResumeFile,
+              child: Container(
+                padding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-              ),
-      const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: InkWell(
-                onTap: _pickResumeFile,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.attach_file, color: Colors.grey),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          resumeFile != null
-                              ? 'Resume Selected'
-                              : 'Attach Resume (PDF/Image)',
-                          style: const TextStyle(color: Colors.grey),
-                        ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.attach_file, color: Colors.grey),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        resumeFile != null
+                        ? 'Resume Selected'
+                            : 'Attach Resume (PDF/Image)',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            CustomButton(
-              buttonText: isUploading ? 'Uploading Resume...' : 'Next',
-              // onTap: isUploading ? null : _registerAndNavigate,
-              onTap: isUploading
-                  ? () {}
-                  : () async {
-                      await _registerAndNavigate();
-                    },
-            ),
-            const SizedBox(height: 20),
-        ],),));
+          ),
+          CustomButton(
+            buttonText: isUploading ? 'Uploading Resume...' : 'Next',
+            // onTap: isUploading ? null : _registerAndNavigate,
+            onTap: isUploading ? () {} : () async {
+              await _registerAndNavigate();
+              },
+          ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ); }
   }
 
-  void _showDaySelectionModal() {
-    showModalBottomSheet(
-      backgroundColor: whiteColor,
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
+    Step _buildDaySelectionStep(){
+        return Step(
+        title: const Text('Availaibility'),
+        content: StatefulBuilder(
           builder: (context, setStateModal) {
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -384,28 +433,14 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                         } else {
                           selectedDays.remove(day);
                         }
-                      });
-                    },
-                  );
-                }),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
                       availabilityController.text = selectedDays.join(', ');
                     });
-                    Navigator.pop(context);
                   },
-                  child: const CustomTextWidget(
-                    text: 'Confirm',
-                    textColor: lightBlueColor,
-                  ),
-                ),
-                const SizedBox(height: 20),
+      );
+                  }),
               ],
             );
           },
-        );
-      },
+        )
     );
   }
-}
