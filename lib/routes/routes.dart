@@ -1,5 +1,6 @@
 // routes.dart
 import 'package:flutter/material.dart';
+import 'package:tutor_matchup/views/auth/map_selection_screen.dart';
 import 'package:tutor_matchup/views/messages/chat_screen.dart';
 import 'package:tutor_matchup/views/schedules/class_session_screen.dart';
 import 'package:tutor_matchup/views/schedules/completed_schedules_screen.dart';
@@ -16,7 +17,6 @@ import 'package:tutor_matchup/views/home/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/auth/tutor_registration_screen.dart';
 import 'package:tutor_matchup/views/schedules/upcoming_schedule_screen.dart';
 import 'package:tutor_matchup/views/auth/user_guidelines_screen.dart';
-//import 'package:tutor_matchup/views/search/search_results_screen.dart';
 
 class Routes {
   static const String splash = '/';
@@ -36,6 +36,7 @@ class Routes {
   static const String tutorDetails = '/tutorDetails';
   static const String forgotPassword = '/forgotPassword';
   static const String searchResults = '/searchResults';
+  static const String mapSelection = '/mapSelection';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -55,5 +56,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.classSession: (context) => const ClassSessionScreen(),
   Routes.tutorDetails: (context) => const TutorDetailsSceens(),
   Routes.forgotPassword: (context) => const ForgotPasswordScreen(),
-  //Routes.searchResults: (context) => const SearchResultScreen(),
+  Routes.mapSelection: (context) => const MapSelectionScreen(),
 };

@@ -31,7 +31,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final TextEditingController subjectsController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController othersEducationController =
-  TextEditingController();
+      TextEditingController();
 
   int _currentStep = 0;
 
@@ -52,7 +52,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadSubjects();
   }
@@ -139,7 +139,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
           startTime = pickedStartTime;
           endTime = pickedEndTime;
           timeController.text =
-          '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
+              '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
         });
       }
     }
@@ -234,7 +234,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
       // Navigate to the User Guidelines page with form data
       Navigator.pushNamed(
         context,
-        Routes.userGuidelines, // Your user guidelines page route
+        Routes.searchResults, // Your user guidelines page route
         arguments: {
           'userType': 'tutor', // Add userType
           'name': nameController.text,
@@ -271,12 +271,12 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
         onStepContinue: () {
           if (_currentStep < 2) {
             if (_currentStep == 0 &&
-                (nameController.text.isEmpty || emailController.text.isEmpty ||
+                (nameController.text.isEmpty ||
+                    emailController.text.isEmpty ||
                     passwordController.text.isEmpty)) {
               // Show error message or snackbar
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please fill in all fields'))
-              );
+                  const SnackBar(content: Text('Please fill in all fields')));
               return; // Prevent moving to the next step
             }
             setState(() => _currentStep++);
@@ -285,7 +285,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
           }
         },
         onStepCancel:
-        _currentStep > 0 ? () => setState(() => _currentStep--) : null,
+            _currentStep > 0 ? () => setState(() => _currentStep--) : null,
         steps: [
           _buildSignUpStep(),
           _buildPersonalInfoStep(),
@@ -293,111 +293,115 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
       ),
     );
   }
-            Step _buildSignUpStep() {
-    return Step(
-              title: const Text('Sign Up'),
-              content: Column(
-                  children: [
-                    const SizedBox(height: 40),
-                    const CustomTextWidget(
-                      text: 'Tutor Registration',
-                      textColor: blackColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      controller: nameController,
-                      hintText: 'Enter Your Name',
-                    ),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: 'Email',
-                    ),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: 'Password',
-                      suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.visibility_off_outlined),
-                      ),
-                    ),
-                    CustomTextField(
-                      controller: phoneNoController,
-                      hintText: 'Phone Number',
-                    ),
-                    CustomButton(
-                      onTap:() {
-                        // Handle sign-up logic (e.g., validation)
-                        // If valid, proceed to the next step
-                        setState(() => _currentStep++);
-                      }, buttonText: 'Sign Up',
-                    ),
-                  ],
-              ),
-            ); }
 
-    Step _buildPersonalInfoStep(){
-            return Step(
-              title: const Text('Personal Info'),
-              content: Column(
-                children: [
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        hintText: 'Highest Level of Education',
-                        contentPadding:
-                          const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: const BorderSide(),
-                        ),
-                      ),
-                    value: selectedEducation,
-                    items: educationLevels.map((level) {
-                      return DropdownMenuItem<String>(
-                        value: level,
-                        child: Text(level),
-                      );
-                    }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedEducation = value;
-                      isOthersSelected = value == 'Others';
-                    });
-                  },
+  Step _buildSignUpStep() {
+    return Step(
+      title: const Text('Sign Up'),
+      content: Column(
+        children: [
+          const SizedBox(height: 40),
+          const CustomTextWidget(
+            text: 'Tutor Registration',
+            textColor: blackColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 24,
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: nameController,
+            hintText: 'Enter Your Name',
+          ),
+          CustomTextField(
+            controller: emailController,
+            hintText: 'Email',
+          ),
+          CustomTextField(
+            controller: passwordController,
+            hintText: 'Password',
+            suffixIcon: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.visibility_off_outlined),
+            ),
+          ),
+          CustomTextField(
+            controller: phoneNoController,
+            hintText: 'Phone Number',
+          ),
+          CustomButton(
+            onTap: () {
+              // Handle sign-up logic (e.g., validation)
+              // If valid, proceed to the next step
+              setState(() => _currentStep++);
+            },
+            buttonText: 'Sign Up',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Step _buildPersonalInfoStep() {
+    return Step(
+      title: const Text('Personal Info'),
+      content: Column(
+        children: [
+          const SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                hintText: 'Highest Level of Education',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(),
                 ),
               ),
-            if (isOthersSelected)
+              value: selectedEducation,
+              items: educationLevels.map((level) {
+                return DropdownMenuItem<String>(
+                  value: level,
+                  child: Text(level),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedEducation = value;
+                  isOthersSelected = value == 'Others';
+                });
+              },
+            ),
+          ),
+          if (isOthersSelected)
             CustomTextField(
               controller: othersEducationController,
               hintText: 'Please specify your highest education',
             ),
-            CustomTextField(
-              controller: availabilityController,
-              hintText: 'Availability',
-              onTap: _showDaySelectionModal,
-              readOnly: true,
-            ),
-            CustomTextField(
-              controller: timeController,
-              hintText: 'Preferred Time Range',
-              onTap: () => _selectTimeRange(context),
-              readOnly: true,
-            ),
-            CustomTextField(
-              controller: experienceController,
-              hintText: 'Previous Experience',
-            ),
-            Text('Subjects want to teach:'),
-            Wrap(
+          CustomTextField(
+            controller: availabilityController,
+            hintText: 'Availability',
+            onTap: _showDaySelectionModal,
+            readOnly: true,
+          ),
+          CustomTextField(
+            controller: timeController,
+            hintText: 'Preferred Time Range',
+            onTap: () => _selectTimeRange(context),
+            readOnly: true,
+          ),
+          CustomTextField(
+            controller: experienceController,
+            hintText: 'Previous Experience',
+          ),
+          Text('Subjects want to teach:'),
+          Wrap(
             spacing: 8.0,
             children: subjects.map((subject) {
               return ChoiceChip(
                 label: Text(subject),
-                selected: selectedSubjects.contains(subject), // Check if subject is in the Set
+                selected: selectedSubjects
+                    .contains(subject), // Check if subject is in the Set
                 onSelected: (bool selected) {
                   setState(() {
                     if (selected) {
@@ -405,19 +409,20 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                     } else {
                       selectedSubjects.remove(subject); // Use remove on the Set
                     }
-                    showOtherField = selectedSubjects.contains("Other"); // Check if "Others" is selected
+                    showOtherField = selectedSubjects
+                        .contains("Other"); // Check if "Others" is selected
                   });
                 },
               );
             }).toList(),
           ),
-        if (showOtherField)
-          TextField(
-            controller: otherSubjectController,
-            decoration: InputDecoration(
-              labelText: 'Please specify other subject',
+          if (showOtherField)
+            TextField(
+              controller: otherSubjectController,
+              decoration: InputDecoration(
+                labelText: 'Please specify other subject',
+              ),
             ),
-          ),
           const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -425,7 +430,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
               onTap: _pickResumeFile,
               child: Container(
                 padding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8.0),
@@ -437,7 +442,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
                     Expanded(
                       child: Text(
                         resumeFile != null
-                        ? 'Resume Selected'
+                            ? 'Resume Selected'
                             : 'Attach Resume (PDF/Image)',
                         style: const TextStyle(color: Colors.grey),
                       ),
@@ -450,12 +455,15 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
           CustomButton(
             buttonText: isUploading ? 'Uploading Resume...' : 'Next',
             // onTap: isUploading ? null : _registerAndNavigate,
-            onTap: isUploading ? () {} : () async {
-              await _registerAndNavigate();
-              },
+            onTap: isUploading
+                ? () {}
+                : () async {
+                    await _registerAndNavigate();
+                  },
           ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ); }
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
   }
+}
