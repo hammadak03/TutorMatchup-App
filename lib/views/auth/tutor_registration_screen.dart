@@ -31,12 +31,10 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final TextEditingController subjectsController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
   final TextEditingController othersEducationController =
-      TextEditingController();
-
-  int _currentStep = 0;
+  TextEditingController();
 
   List<String> subjects = [];
-  Set<String> selectedSubjects = {};
+  Set<String> selectedSubject = {};
   bool showOtherField = false;
   TextEditingController otherSubjectController = TextEditingController();
 
@@ -52,68 +50,9 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     loadSubjects();
-  }
-
-  void _showDaySelectionModal() {
-    showModalBottomSheet(
-      backgroundColor: whiteColor,
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setStateModal) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CustomTextWidget(
-                    text: 'Select Preferred Days',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    textColor: blackColor,
-                  ),
-                ),
-                ...days.map((day) {
-                  bool isSelected = selectedDays.contains(day);
-                  return CheckboxListTile(
-                    title: CustomTextWidget(
-                      text: day,
-                      textColor: blackColor,
-                    ),
-                    value: isSelected,
-                    onChanged: (bool? value) {
-                      setStateModal(() {
-                        if (value == true) {
-                          selectedDays.add(day);
-                        } else {
-                          selectedDays.remove(day);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      availabilityController.text = selectedDays.join(', ');
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: const CustomTextWidget(
-                    text: 'Confirm',
-                    textColor: lightBlueColor,
-                  ),
-                ),
-                const SizedBox(height: 20),
-              ],
-            );
-          },
-        );
-      },
-    );
   }
 
   Future<void> loadSubjects() async {
@@ -121,6 +60,35 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
     final List<dynamic> data = json.decode(response);
     setState(() {
       subjects = data.cast<String>();
+    });
+  }
+
+  Future<void> addNewSubject(String newSubject) async {
+    // 1. Load existing subjects
+    final String response = await rootBundle.loadString('assets/subjects.json');
+    final List<dynamic> data = json.decode(response);
+
+    // 2. Add the new subject
+    if (!data.contains(newSubject)) {
+      data.add(newSubject);
+    }
+
+    // 3. Convert back to JSON and write to file
+    final String updatedJson = json.encode(data);
+    // You'll need to handle writing to the file here.
+    // This usually involves platform-specific code or using a package
+    // like path_provider to get the app's documents directory.
+    // Example using path_provider:
+    // final directory = await getApplicationDocumentsDirectory();
+    // final file = File('${directory.path}/subjects.json');
+    // await file.writeAsString(updatedJson);
+
+    // 4. Update the subjects list in the UI
+    setState(() {
+      subjects = data.cast<String>();
+      selectedSubject.add(newSubject); // Select the new subject
+      showOtherField = false; // Hide the "Other" field
+      otherSubjectController.clear(); // Clear the "Other" field
     });
   }
 
@@ -139,7 +107,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
           startTime = pickedStartTime;
           endTime = pickedEndTime;
           timeController.text =
-              '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
+          '${pickedStartTime.format(context)} - ${pickedEndTime.format(context)}';
         });
       }
     }
@@ -214,27 +182,23 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
     if (nameController.text.isNotEmpty &&
         emailController.text.isNotEmpty &&
         passwordController.text.isNotEmpty &&
-        phoneNoController.text.isNotEmpty &&
-        selectedEducation != null &&
-        selectedEducation!.isNotEmpty && // Ensure it's not null or empty
-        availabilityController.text.isNotEmpty &&
-        timeController.text.isNotEmpty &&
-        subjectsController.text.isNotEmpty) {
+        phoneNoController.text.isNotEmpty
+    ) {
       // Upload resume
       String? resumeUrl = await _uploadResume();
 
       // Check if resumeUrl is null
-      if (resumeUrl == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to upload resume.')),
-        );
-        return; // Exit the function if the resume upload fails
-      }
+      // if (resumeUrl == null) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Failed to upload resume.')),
+      //   );
+      //   return; // Exit the function if the resume upload fails
+      // }
 
       // Navigate to the User Guidelines page with form data
       Navigator.pushNamed(
         context,
-        Routes.mapSelection, // Your user guidelines page route
+        Routes.mapSelection,
         arguments: {
           'userType': 'tutor', // Add userType
           'name': nameController.text,
@@ -251,9 +215,22 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
         },
       );
     } else {
-      // Show error message for missing fields
+      // Show a more specific error message for the missing required fields
+      String errorMessage = '';
+      if (nameController.text.isEmpty) {
+        errorMessage += 'Name is required.\n';
+      }
+      if (emailController.text.isEmpty) {
+        errorMessage += 'Email is required.\n';
+      }
+      if (passwordController.text.isEmpty) {
+        errorMessage += 'Password is required.\n';
+      }
+      if (selectedSubject.isEmpty) {
+        errorMessage += 'Please select at least one subject.\n';
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields.')),
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }
@@ -261,209 +238,234 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
-      appBar: AppBar(
-        title: const Text('Tutor Registration'),
-      ),
-      body: Stepper(
-        currentStep: _currentStep,
-        onStepTapped: (step) => setState(() => _currentStep = step),
-        onStepContinue: () {
-          if (_currentStep < 2) {
-            if (_currentStep == 0 &&
-                (nameController.text.isEmpty ||
-                    emailController.text.isEmpty ||
-                    passwordController.text.isEmpty)) {
-              // Show error message or snackbar
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please fill in all fields')));
-              return; // Prevent moving to the next step
-            }
-            setState(() => _currentStep++);
-          } else {
-            _registerAndNavigate();
-          }
-        },
-        onStepCancel:
-            _currentStep > 0 ? () => setState(() => _currentStep--) : null,
-        steps: [
-          _buildSignUpStep(),
-          _buildPersonalInfoStep(),
-        ],
-      ),
-    );
-  }
-
-  Step _buildSignUpStep() {
-    return Step(
-      title: const Text('Sign Up'),
-      content: Column(
-        children: [
-          const SizedBox(height: 40),
-          const CustomTextWidget(
-            text: 'Tutor Registration',
-            textColor: blackColor,
-            fontWeight: FontWeight.w700,
-            fontSize: 24,
-          ),
-          const SizedBox(height: 20),
-          CustomTextField(
-            controller: nameController,
-            hintText: 'Enter Your Name',
-          ),
-          CustomTextField(
-            controller: emailController,
-            hintText: 'Email',
-          ),
-          CustomTextField(
-            controller: passwordController,
-            hintText: 'Password',
-            suffixIcon: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.visibility_off_outlined),
-            ),
-          ),
-          CustomTextField(
-            controller: phoneNoController,
-            hintText: 'Phone Number',
-          ),
-          CustomButton(
-            onTap: () {
-              // Handle sign-up logic (e.g., validation)
-              // If valid, proceed to the next step
-              setState(() => _currentStep++);
-            },
-            buttonText: 'Sign Up',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Step _buildPersonalInfoStep() {
-    return Step(
-      title: const Text('Personal Info'),
-      content: Column(
-        children: [
-          const SizedBox(height: 5),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                hintText: 'Highest Level of Education',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(),
+        backgroundColor: whiteColor,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                const CustomTextWidget(
+                  text: 'Tutor Registration',
+                  textColor: blackColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24,
                 ),
-              ),
-              value: selectedEducation,
-              items: educationLevels.map((level) {
-                return DropdownMenuItem<String>(
-                  value: level,
-                  child: Text(level),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedEducation = value;
-                  isOthersSelected = value == 'Others';
-                });
-              },
-            ),
-          ),
-          if (isOthersSelected)
-            CustomTextField(
-              controller: othersEducationController,
-              hintText: 'Please specify your highest education',
-            ),
-          CustomTextField(
-            controller: availabilityController,
-            hintText: 'Availability',
-            onTap: _showDaySelectionModal,
-            readOnly: true,
-          ),
-          CustomTextField(
-            controller: timeController,
-            hintText: 'Preferred Time Range',
-            onTap: () => _selectTimeRange(context),
-            readOnly: true,
-          ),
-          CustomTextField(
-            controller: experienceController,
-            hintText: 'Previous Experience',
-          ),
-          Text('Subjects want to teach:'),
-          Wrap(
-            spacing: 8.0,
-            children: subjects.map((subject) {
-              return ChoiceChip(
-                label: Text(subject),
-                selected: selectedSubjects
-                    .contains(subject), // Check if subject is in the Set
-                onSelected: (bool selected) {
-                  setState(() {
-                    if (selected) {
-                      selectedSubjects.add(subject); // Use add on the Set
-                    } else {
-                      selectedSubjects.remove(subject); // Use remove on the Set
-                    }
-                    showOtherField = selectedSubjects
-                        .contains("Other"); // Check if "Others" is selected
-                  });
-                },
-              );
-            }).toList(),
-          ),
-          if (showOtherField)
-            TextField(
-              controller: otherSubjectController,
-              decoration: InputDecoration(
-                labelText: 'Please specify other subject',
-              ),
-            ),
-          const SizedBox(height: 5),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: InkWell(
-              onTap: _pickResumeFile,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  controller: nameController,
+                  hintText: 'Enter Your Name',
                 ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.attach_file, color: Colors.grey),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        resumeFile != null
-                            ? 'Resume Selected'
-                            : 'Attach Resume (PDF/Image)',
-                        style: const TextStyle(color: Colors.grey),
+                CustomTextField(
+                  controller: emailController,
+                  hintText: 'Email',
+                ),
+                CustomTextField(
+                  controller: passwordController,
+                  hintText: 'Password',
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.visibility_off_outlined),
+                  ),
+                ),
+                CustomTextField(
+                  controller: phoneNoController,
+                  hintText: 'Phone Number',
+                ),
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        hintText: 'Highest Level of Education',
+                        contentPadding:
+                        const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: const BorderSide(),
+                        ),
                       ),
+                      value: selectedEducation,
+                      items: educationLevels.map((level) {
+                        return DropdownMenuItem<String>(
+                          value: level,
+                          child: Text(level),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedEducation = value;
+                          isOthersSelected = value == 'Others';
+                        });
+                      },
                     ),
-                  ],
                 ),
-              ),
-            ),
-          ),
-          CustomButton(
-            buttonText: isUploading ? 'Uploading Resume...' : 'Next',
-            // onTap: isUploading ? null : _registerAndNavigate,
-            onTap: isUploading
-                ? () {}
-                : () async {
+                if (isOthersSelected)
+                  CustomTextField(
+                    controller: othersEducationController,
+                    hintText: 'Please specify your highest education',
+                  ),
+                CustomTextField(
+                  controller: availabilityController,
+                  hintText: 'Availability',
+                  onTap: _showDaySelectionModal,
+                  readOnly: true,
+                ),
+                CustomTextField(
+                  controller: timeController,
+                  hintText: 'Preferred Time Range',
+                  onTap: () => _selectTimeRange(context),
+                  readOnly: true,
+                ),
+                CustomTextField(
+                  controller: experienceController,
+                  hintText: 'Previous Experience',
+                ),
+                Text('Subjects want to teach:'),
+                Wrap(
+                    spacing: 8.0,
+                    children: subjects.map((subject) {
+                      return ChoiceChip(
+                        label: Text(subject),
+                        selected: selectedSubject.contains(subject),                      onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              selectedSubject.add(subject);
+                              if (subject == "Other") {
+                                showOtherField = true;
+                              }
+                            } else {
+                              selectedSubject.remove(subject);
+                              if (subject == "Other") {
+                                showOtherField = false;
+                              }
+                            }
+
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                if (showOtherField)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: otherSubjectController,
+                          decoration: const InputDecoration(
+                            labelText: 'Please specify other subject',
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          if (otherSubjectController.text.isNotEmpty) {
+                            addNewSubject(otherSubjectController.text);
+                          }
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 5),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                //   child: InkWell(
+                //     onTap: _pickResumeFile,
+                //     child: Container(
+                //       padding:
+                //       const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                //       decoration: BoxDecoration(
+                //         border: Border.all(color: Colors.grey),
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //       child: Row(
+                //         children: [
+                //           const Icon(Icons.attach_file, color: Colors.grey),
+                //           const SizedBox(width: 10),
+                //           Expanded(
+                //             child: Text(
+                //               resumeFile != null
+                //                   ? 'Resume Selected'
+                //                   : 'Attach Resume (PDF/Image)',
+                //               style: const TextStyle(color: Colors.grey),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                CustomButton(
+                  buttonText: isUploading ? 'Uploading Resume...' : 'Next',
+                  // onTap: isUploading ? null : _registerAndNavigate,
+                  onTap: isUploading
+                      ? () {}
+                      : () async {
                     await _registerAndNavigate();
                   },
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
+                ),
+                const SizedBox(height: 20),
+              ],),),
+        ));
+  }
+
+  void _showDaySelectionModal() {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateModal) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CustomTextWidget(
+                    text: 'Select Preferred Days',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    textColor: blackColor,
+                  ),
+                ),
+                ...days.map((day) {
+                  bool isSelected = selectedDays.contains(day);
+                  return CheckboxListTile(
+                    title: CustomTextWidget(
+                      text: day,
+                      textColor: blackColor,
+                    ),
+                    value: isSelected,
+                    onChanged: (bool? value) {
+                      setStateModal(() {
+                        if (value == true) {
+                          selectedDays.add(day);
+                        } else {
+                          selectedDays.remove(day);
+                        }
+                      });
+                    },
+                  );
+                }),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      availabilityController.text = selectedDays.join(', ');
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const CustomTextWidget(
+                    text: 'Confirm',
+                    textColor: lightBlueColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

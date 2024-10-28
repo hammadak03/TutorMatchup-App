@@ -36,8 +36,8 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     'Grade 6',
     'Grade 7',
     'Grade 8',
-    'SSC-1',
-    'SSC-2',
+    'Grade 9 (SSC-1)',
+    'Grade 10 (SSC-2)',
     'HSC-1',
     'HSC-2'
   ];

@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.6
   firebase_core: ^3.3.0
   firebase_auth: ^5.1.4
@@ -21,6 +20,8 @@ dependencies:
   flutter_facebook_auth: ^7.1.1
   google_maps_flutter: ^2.9.0
   sliding_up_panel: ^2.0.0+1
+  geolocator: ^13.0.1
+  geohash_plus: ^1.1.1
 
 dev_dependencies:
   flutter_test:

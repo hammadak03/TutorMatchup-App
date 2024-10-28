@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps_flutter;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapSelectionScreen extends StatefulWidget {
   const MapSelectionScreen({Key? key}) : super(key: key);
@@ -17,7 +20,76 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
   final TextEditingController _streetAddressController =
       TextEditingController();
 
-  String? _selectedLabel; // For the label buttons (Home, Work, Other)
+  String? _selectedLabel;
+  Set<Marker> _markers = {}; // Set to store markers
+  google_maps_flutter.LatLng? _selectedLocation; // Store the selected location (latitude, longitude)
+
+  // Initialize mapData as a Map
+  Map<String, dynamic> mapData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation(); // Call _getCurrentLocation() here
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled, handle it accordingly.
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, handle it accordingly.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle it accordingly.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      _selectedLocation = google_maps_flutter.LatLng(position.latitude, position.longitude);
+      _markers.add(Marker(
+        markerId: const MarkerId('selectedLocation'),
+        position: _selectedLocation!, // Set initial marker to current location
+      ));
+    });
+  }
+
+  void _handleMapTap(google_maps_flutter.LatLng tappedLocation) {
+    setState(() {
+      _markers.clear(); // Clear existing markers
+      _markers.add(Marker(
+        markerId: const MarkerId('selectedLocation'),
+        position: tappedLocation,
+      ));
+      _selectedLocation = tappedLocation;
+
+      // Generate geohash directly using Geohash.encode
+      // String geohash = Geohash.encode( // Change this line
+      //   tappedLocation.latitude,
+      //   tappedLocation.longitude,
+      // );
+      //
+      // // Update mapData with geohash
+      // mapData = {'geohash': geohash};
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +130,17 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
       body: Stack(
         children: [
           // Placeholder for the map (leave blank for now)
-          Container(
-            color: Colors.grey[300], // Placeholder for the map area
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.6,
-            child: const Center(
-              child: Text('Map will be here'),
+            child: google_maps_flutter.GoogleMap(
+              initialCameraPosition: google_maps_flutter.CameraPosition(
+                target: const google_maps_flutter.LatLng(
+                    37.42796133580664, -122.085749655962),
+                // Default location
+                zoom: 14.4746,
+              ),
+              markers: _markers, // Set of markers
+              onTap: _handleMapTap, // Handle map taps to add markers
             ),
           ),
           // Sliding up panel
@@ -146,6 +224,8 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
                           'name': name,
                           'email': email,
                           'password': password,
+                          'latitude': _selectedLocation?.latitude, // Pass latitude
+                          'longitude': _selectedLocation?.longitude, // Pass longitude
                           if (userType == 'student') ...{
                             'institute': institute,
                             'year': year,
