@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -27,14 +30,39 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
   final PanelController _panelController = PanelController();
 
   // Sample Data for Provinces, Cities, and Regions
-  final List<String> _provinces = ['Province 1', 'Province 2', 'Province 3'];
-  final List<String> _cities = ['City 1', 'City 2', 'City 3'];
-  final List<String> _regions = ['Region 1', 'Region 2', 'Region 3'];
+  Map<String, dynamic> _provincesData = {};
+  Map<String, dynamic> _citiesData = {};
+  Map<String, dynamic> _regionsData = {};
 
   // Selected Location
   String? _selectedProvince;
   String? _selectedCity;
   String? _selectedRegion;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocationData();
+  }
+
+  // Load Location Data from JSON Files
+  Future<void> _loadLocationData() async {
+    // Load provinces data
+    final provincesJson =
+    await rootBundle.loadString('assets/pakistan_provinces.json');
+    _provincesData = json.decode(provincesJson);
+
+    // Load cities data
+    final citiesJson = await rootBundle.loadString('assets/pakistan_cities.json');
+    _citiesData = json.decode(citiesJson);
+
+    // Load regions data
+    final regionsJson =
+    await rootBundle.loadString('assets/pakistan_regions.json');
+    _regionsData = json.decode(regionsJson);
+
+    setState(() {}); // Update UI after loading data
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +113,7 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
           DropdownButtonFormField<String>(
             decoration: const InputDecoration(labelText: 'Province'),
             value: _selectedProvince,
-            items: _provinces.map((province) {
+            items: _provincesData.keys.map((province) {
               return DropdownMenuItem(
                 value: province,
                 child: Text(province),
@@ -94,43 +122,50 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
             onChanged: (value) {
               setState(() {
                 _selectedProvince = value;
+                _selectedCity = null; // Reset city and region when province changes
+                _selectedRegion = null;
               });
             },
           ),
 
-          // City Dropdown
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: 'City'),
-            value: _selectedCity,
-            items: _cities.map((city) {
-              return DropdownMenuItem(
-                value: city,
-                child: Text(city),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedCity = value;
-              });
-            },
-          ),
+          // City Dropdown (filtered by province)
+          if (_selectedProvince != null)
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(labelText: 'City'),
+              value: _selectedCity,
+              items: (_citiesData[_selectedProvince] as List<dynamic>?)
+                  ?.map((city) => DropdownMenuItem(
+                value: city.toString(),
+                child: Text(city.toString()),
+              ))
+                  .toList() ??
+                  [],
+              onChanged: (value) {
+                setState(() {
+                  _selectedCity = value;
+                  _selectedRegion = null; // Reset region when city changes
+                });
+              },
+            ),
 
-          // Region Dropdown
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: 'Region'),
-            value: _selectedRegion,
-            items: _regions.map((region) {
-              return DropdownMenuItem(
-                value: region,
-                child: Text(region),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedRegion = value;
-              });
-            },
-          ),
+          // Region Dropdown (filtered by city)
+          if (_selectedCity != null)
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(labelText: 'Region'),
+              value: _selectedRegion,
+              items: (_regionsData[_selectedCity] as List<dynamic>?)
+                  ?.map((region) => DropdownMenuItem(
+                value: region.toString(),
+                child: Text(region.toString()),
+              ))
+                  .toList() ??
+                  [],
+              onChanged: (value) {
+                setState(() {
+                  _selectedRegion = value;
+                });
+              },
+            ),
 
           const SizedBox(height: 24),
 
