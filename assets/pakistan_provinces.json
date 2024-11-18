@@ -1,0 +1,9 @@
+{
+  "Sindh": ["Karachi", "Hyderabad", "Sukkur"],
+  "Punjab": ["Lahore", "Faisalabad", "Rawalpindi"],
+  "Balochistan": ["Quetta", "Turbat", "Gwadar"],
+  "Khyber Pakhtunkhwa": ["Peshawar", "Mardan", "Abbottabad"],
+  "Gilgit-Baltistan": ["Gilgit", "Skardu", "Hunza"],
+  "Islamabad Capital Territory": ["Islamabad"],
+  "Azad Jammu and Kashmir": ["Muzaffarabad", "Mirpur", "Kotli"]
+}

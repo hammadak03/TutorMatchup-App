@@ -1,0 +1,7 @@
+{
+  "Karachi": ["Gulshan-e-Iqbal", "Defence", "Malir", "North Nazimabad", "Liaquatabad", "Shah Faisal Colony", "Korangi", "North Karachi", "Landhi", "Gulberg Town"],
+  "Lahore": ["Johar Town", "DHA", "Gulberg", "Model Town", "Cantt", "Allama Iqbal Town", "Samnabad", "Wagah", "Raiwind", "Shahdara"],
+  "Quetta": ["Jinnah Town", "Satellite Town", "Airport Road", "Zarghoon Road", "Shahbaz Town", "Kasi Road", "Prince Road", "Brewery Road", "Samungli Road", "Joint Road"],
+  "Islamabad": ["F-6", "F-7", "F-8", "G-6", "G-7", "G-8", "G-9", "G-10", "G-11", "I-8"],
+  "Muzaffarabad": ["Akalgarh", "Chehla Bandi", "Chattar", "Dhani", "Gojra", "Leepa Valley", "Neelum Valley", "Jhelum Valley", "Rawalakot", "Bagh"],
+}
