@@ -19,6 +19,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController instituteController = TextEditingController();
   final TextEditingController yearController = TextEditingController();
   final TextEditingController learningFormatController =
@@ -38,8 +39,12 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     'Grade 8',
     'Grade 9 (SSC-1)',
     'Grade 10 (SSC-2)',
-    'HSC-1',
-    'HSC-2'
+    'Grade 11 (HSC-1)',
+    'Grade 12 (HSC-2)',
+    'FSC-I',
+    'FSC-II',
+    'A-Levels',
+    'O-Levels'
   ];
   final List<String> learningFormats = ['In-Person', 'Online', 'Hybrid'];
   final List<String> days = [
@@ -257,7 +262,6 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                 if (nameController.text.isNotEmpty &&
                     emailController.text.isNotEmpty &&
                     passwordController.text.isNotEmpty &&
-                    instituteController.text.isNotEmpty &&
                     yearController.text.isNotEmpty &&
                     learningFormatController.text.isNotEmpty &&
                     preferredDaysController.text.isNotEmpty &&
@@ -270,6 +274,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                       'name': nameController.text,
                       'email': emailController.text,
                       'password': passwordController.text,
+                      'phoneNumber': phoneNumberController.text,
                       'institute': instituteController.text,
                       'year': yearController.text,
                       'learningFormat': learningFormatController.text,
@@ -278,8 +283,10 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                     },
                   );
                 } else {
-                  // Handle empty fields, show a message
-                }
+// Handle empty required fields, show a message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please fill in all required fields')),
+                  );                }
               },
               buttonText: 'Create Account',
             ),

@@ -10,6 +10,8 @@ import '../../services/firebase_auth_services.dart';
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  get userData => null;
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -20,34 +22,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _userImageUrl;
   String? _userSpecialization;
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserData();
-  }
-
-  Future<void> _fetchUserData() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users') // Replace with your collection name
-            .doc(user.uid)
-            .get();
-        if (userDoc.exists) {
-          setState(() {
-            _userName = userDoc.data()?['name'] as String?;
-            _userImageUrl = userDoc.data()?['imageUrl'] as String?;
-            _userSpecialization = userDoc.data()?['specialization'] as String?;
-          });
-        }
-      }
-    } catch (e) {
-      print('Error fetching user data: $e');
-      // Handle error, e.g., show a Snackbar
+  // Getter to access userData from ModalRoute arguments
+  Map<String, dynamic> get userData {
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is Map<String, dynamic>) {
+      return arguments;
+    } else {
+      // Handle the case where arguments are not a Map
+      // You might want to throw an error or return an empty map
+      return {}; // Returning an empty map for now
     }
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserData();
+  }
+  
+  
+  void _initializeUserData() {
+    setState(() {
+      _userName = widget.userData['name'] as String?;
+      _userImageUrl = widget.userData['imageUrl'] as String?;
+      _userSpecialization = widget.userData['userType'] == 'student'
+          ? widget.userData['grade'] as String? // Example: grade for students
+          : widget.userData['specialization'] as String?; // Example: specialization for tutors
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
