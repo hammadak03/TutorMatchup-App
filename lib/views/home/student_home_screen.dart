@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
@@ -6,8 +10,77 @@ import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import 'package:tutor_matchup/widgets/near_tutor_card.dart';
 import 'package:tutor_matchup/widgets/upcomming_lecture_card.dart';
 
-class StudentHomeScreen extends StatelessWidget {
+class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
+
+  @override
+  State<StudentHomeScreen> createState() => _StudentHomeScreenState();
+}
+
+class _StudentHomeScreenState extends State<StudentHomeScreen> {
+
+  String? _userName; // Variable to store user name
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData(); // Fetch user data when the widget initializes
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (userDoc.exists) {
+          setState(() {
+            _userName = userDoc.data()?['name'] as String?;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      // Handle error, e.g., show an error message
+    }
+  }
+
+  // Function to calculate distance using Haversine formula
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a)); // Distance in kilometers
+  }
+
+  // Function to fetch tutors from Firebase and filter by distance
+  Future<List<DocumentSnapshot>> fetchNearbyTutors(
+      double userLatitude, double userLongitude) async {
+    final tutorsCollection = FirebaseFirestore.instance.collection('tutors');
+    final querySnapshot = await tutorsCollection.get();
+    final tutors = querySnapshot.docs;
+
+    // Filter tutors based on distance
+    final nearbyTutors = tutors.where((tutor) {
+      final tutorLatitude = tutor['latitude'] as double?;
+      final tutorLongitude = tutor['longitude'] as double?;
+
+      if (tutorLatitude != null && tutorLongitude != null) {
+        final distance = calculateDistance(
+            userLatitude, userLongitude, tutorLatitude, tutorLongitude);
+        return distance <= 10; // Within 10km radius
+      } else {
+        return false; // Exclude tutors with missing location data
+      }
+    }).toList();
+
+    return nearbyTutors;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,22 +130,38 @@ class StudentHomeScreen extends StatelessWidget {
               height: 10,
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    child: UpcommingLectureCard(
-                        onTap: () {
-                          //TODO: Pass class session data as arguements to classSession screen.
-                          Navigator.pushNamed(context, Routes.classSession);
-                        },
-                        name: 'Ahmed',
-                        availableDays: 'Monday-Tuesday',
-                        availableTime: '5:00 - 6:00 pm',
-                        subjects: 'Biology - Maths'),
-                  );
+              child: FutureBuilder<List<DocumentSnapshot>>(
+                future: fetchNearbyTutors(
+                    37.42796133580664, -122.085749655962), // Replace with user's location
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final nearbyTutors = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: nearbyTutors.length,
+                      itemBuilder: (context, index) {
+                        final tutor =
+                        nearbyTutors[index].data() as Map<String, dynamic>;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: NearTutorCard(
+                            name: tutor['name'] ?? 'Unknown Name',
+                            reviews: '4.8 (120 Reviews)', // Replace with actual reviews
+                            location: '1.8 Km', // Replace with calculated distance
+                            opensAt: 'Open at 4:00pm', // Replace with tutor's availability
+                            subjects: tutor['subjects'] ?? 'Unknown Subjects',
+                            onPressed: () {
+                              Navigator.pushNamed(context, Routes.tutorDetails);
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
                 },
               ),
             ),
@@ -133,27 +222,40 @@ class StudentHomeScreen extends StatelessWidget {
               height: 20,
             ),
             Expanded(
-              //TODO: Wrap around Future builder when working on backend, and create future function
-              child: ListView.builder(
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    child: NearTutorCard(
-                      name: 'Mamtaz Pawnar',
-                      reviews: '4.8 (120 Reviews)',
-                      location: '1.8 Km',
-                      opensAt: 'Open at 4:00pm',
-                      subjects: 'Physics Specialist',
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.tutorDetails);
+              child: FutureBuilder<List<DocumentSnapshot>>(
+                future: fetchNearbyTutors(
+                    37.42796133580664, -122.085749655962), // Replace with user's location
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final nearbyTutors = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: nearbyTutors.length,
+                      itemBuilder: (context, index) {
+                        final tutor = nearbyTutors[index].data() as Map<String, dynamic>;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: NearTutorCard(
+                            name: tutor['name'] ?? 'Unknown Name',
+                            reviews: '4.8 (120 Reviews)', // Replace with actual reviews
+                            location: '1.8 Km', // Replace with calculated distance
+                            opensAt: 'Open at 4:00pm', // Replace with tutor's availability
+                            subjects: tutor['subjects'] ?? 'Unknown Subjects',
+                            onPressed: () {
+                              Navigator.pushNamed(context, Routes.tutorDetails);
+                            },
+                          ),
+                        );
                       },
-                    ),
-                  );
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
