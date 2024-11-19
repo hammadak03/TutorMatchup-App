@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import '../../routes/routes.dart';
 
 class AddressSelectionScreen extends StatefulWidget {
   const AddressSelectionScreen({Key? key}) : super(key: key);
@@ -73,21 +76,19 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
       body: Stack(
         children: [
           // Google Map
-          GoogleMap(
-            initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) {
-              _mapController = controller;
-            },
-            onTap: (LatLng latLng) {
-              // Handle map tap to update selected address
-              _updateSelectedAddress(latLng);
-            },
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.grey[300], // Light gray background
+            child: const Center(
+              child: Text('Map will be here. Select Address'),
+            ),
           ),
 
           // Sliding Panel
           SlidingUpPanel(
             controller: _panelController,
-            minHeight: 0,
+            minHeight: 100,
             maxHeight: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
             panel: _buildSlidingPanelContent(),
           ),
@@ -109,7 +110,7 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Province Dropdown
+          // Province Dropdown (Normal)
           DropdownButtonFormField<String>(
             decoration: const InputDecoration(labelText: 'Province'),
             value: _selectedProvince,
@@ -194,6 +195,6 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
   // Confirm Address
   void _confirmAddress() {
     // Handle address confirmation, e.g., navigate back with selected address
-    Navigator.pop(context, _selectedAddress);
+    Navigator.pushNamed(context, Routes.studentHome);
   }
 }
