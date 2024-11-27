@@ -279,11 +279,15 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
               'learningFormat': learningFormatController.text,
               'preferredDays': preferredDaysController.text,
               'preferredTime': preferredTimeController.text,
+              'province': provinceController.text,
+              'city': cityController.text,
+              'region': regionController.text,
             },
           );
         } else {
           // Handle empty fields, show a message
         }
+      }
       },
     onStepCancel : (){
         if (_currentStep > 0){
@@ -303,128 +307,64 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     hintText: 'Password',
     controller: passwordController,
     suffixIcon: IconButton(
-    
-    ),
+    icon: const Icon(Icons.visibility_off),
+    onPressed: (){},
+      ),
     )
     ],
+    ),
+    ),
+    Step(
+    title: const Text('Academic Details'),
+    content: Column(
+      children: [
+      CustomTextField(
+    hintText: 'School/College/University',
+    controller: instituteController,
+    ),
+    CustomTextField(
+    hintText: 'Grade/Year',
+    controller: yearController,
+    onTap: ()=> _showDropdown(grades, yearController),
+    readOnly: true,
+    ),
+    CustomTextField(
+    hintText: 'Learning Format',
+    controller: learningFormatController,
+    onTap: ()=> _showDropdown(learningFormats, learningFormatController),
+    readOnly: true,
+    )
+      ],
     )
     )
+    ,
+      Step(
+        title: const Text('Loction Details'),
+        content: Column(
+          children: [
+            CustomTextField(
+                hintText: 'Province',
+              controller: provinceController,
+              onTap: () => _showDropdown(provinces, provinceController),
+              readOnly: true,
+            ),
+            CustomTextField(
+              hintText: 'City',
+              controller: cityController,
+              onTap: () => _showDropdown(cities, cityController),
+              readOnly: true,
+            ),
+            CustomTextField(
+              hintText: 'Region',
+              controller: regionController,
+              onTap: () => _showDropdown(regions, regionController),
+              readOnly: true,
+            ),
+          ],
+        )
+    )
+
     ]
-        ,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 60,
-              ),
-              const CustomTextWidget(
-                text: 'Student Registration',
-                textColor: blackColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              CustomTextField(
-                hintText: 'Enter Your Name',
-                controller: nameController,
-              ),
-              CustomTextField(
-                hintText: 'Email',
-                controller: emailController,
-              ),
-              CustomTextField(
-                hintText: 'Password',
-                controller: passwordController,
-                suffixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.visibility_off_outlined),
-                ),
-              ),
-              CustomTextField(
-                controller: instituteController,
-                hintText: 'School/College/University',
-              ),
-
-              // Grade/Year field with dropdown
-              CustomTextField(
-                controller: yearController,
-                hintText: 'Grade/Year',
-                onTap: _showGradeDropdown,
-                readOnly: true,
-              ),
-
-              // Learning Format field with dropdown
-              CustomTextField(
-                controller: learningFormatController,
-                hintText: 'Learning Format',
-                onTap: _showLearningFormatDropdown,
-                readOnly: true,
-              ),
-
-              // Preferred Days field with multiple selection modal
-              CustomTextField(
-                controller: preferredDaysController,
-                hintText: 'Preferred Days',
-                onTap: _showDaySelectionModal,
-                readOnly: true,
-              ),
-
-              // Preferred Time field with clock
-              CustomTextField(
-                controller: preferredTimeController,
-                hintText: 'Preferred Time',
-                onTap: () => _selectTime(context),
-                readOnly: true,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              CustomButton(
-                onTap: () {
-                  
-                buttonText: 'Create Account',
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, Routes.login);
-                },
-                child: const CustomTextWidget(
-                  text: 'Already have account?',
-                  textColor: blackColor,
-                  fontSize: 18,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text.rich(
-                  TextSpan(
-                    text: 'By clicking "Create Account" you agree to our ',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'terms ',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      TextSpan(
-                        text: 'and ',
-                      ),
-                      TextSpan(
-                        text: 'privacy policy.',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
