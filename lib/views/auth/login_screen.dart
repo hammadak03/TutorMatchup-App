@@ -143,43 +143,40 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            Row(
+            const Row(
               children: <Widget>[
-                const Expanded(
+                Expanded(
                     child: Divider(
                   indent: 40,
                   endIndent: 20,
                 )),
-            ],
+                Text("Or With"),
+                Expanded(
+                  child: Divider(
+                    indent: 20,
+                    endIndent: 40,
+                  ),
+                ),
+              ],
             ),
-
-            //     Text("Or With"),
-            //     Expanded(
-            //       child: Divider(
-            //         indent: 20,
-            //         endIndent: 40,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(
-            //   height: 20,
-            // ),
-            // CustomButton(
-            //   onTap: () {},
-            //   buttonText: 'Login With Facebook',
-            //   textSize: 18,
-            //   image: 'assets/images/facebook_logo.png',
-            // ),
-            // CustomButton(
-            //   onTap: () {},
-            //   buttonText: 'Login With Google',
-            //   backgroundColor: whiteColor,
-            //   buttonTextColor: Colors.black54,
-            //   buttonBorderColor: Colors.black54,
-            //   textSize: 18,
-            //   image: 'assets/images/google_logo.png',
-            // ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomButton(
+              onTap: () {},
+              buttonText: 'Login With Facebook',
+              textSize: 18,
+              image: 'assets/images/facebook_logo.png',
+            ),
+            CustomButton(
+              onTap: () {},
+              buttonText: 'Login With Google',
+              backgroundColor: whiteColor,
+              buttonTextColor: Colors.black54,
+              buttonBorderColor: Colors.black54,
+              textSize: 18,
+              image: 'assets/images/google_logo.png',
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
