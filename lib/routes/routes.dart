@@ -32,6 +32,7 @@ class Routes {
   static const String chat = '/chat';
   static const String homeWrapper = '/homeWrapper';
   static const String tutorHome = '/tutorHome';
+  static const String studentHome = '/studentHome';
   static const String classSession = '/classSession';
   static const String tutorDetails = '/tutorDetails';
   static const String forgotPassword = '/forgotPassword';
@@ -45,7 +46,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.tutorRegisteration: (context) => const TutorRegistrationScreen(),
   Routes.studentRegisteration: (context) => const StudentRegistrationScreen(),
   Routes.userGuidelines: (context) => const UserGuidelinesScreen(),
-  Routes.home: (context) => const StudentHomeScreen(),
+  Routes.studentHome: (context) => const StudentHomeScreen(),
   Routes.completedSchedules: (context) => const CompletedSchedulesScreen(),
   Routes.upcommingSchedules: (context) => const UpcomingScheduleScreen(),
   Routes.missedSchedules: (context) => const MissedSchedulesScreen(),

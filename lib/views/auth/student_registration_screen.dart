@@ -16,6 +16,8 @@ class StudentRegistrationScreen extends StatefulWidget {
 }
 
 class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
+  int _currentStep = 0;
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -25,6 +27,9 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   TextEditingController();
   final TextEditingController preferredDaysController = TextEditingController();
   final TextEditingController preferredTimeController = TextEditingController();
+  final TextEditingController provinceController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController regionController = TextEditingController();
 
   // Options for dropdowns and checkboxes
   final List<String> grades = [
@@ -39,7 +44,9 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     'SSC-1',
     'SSC-2',
     'HSC-1',
-    'HSC-2'
+    'HSC-2',
+    'FSC-1',
+    'FSC-2',
   ];
   final List<String> learningFormats = ['In-Person', 'Online', 'Hybrid'];
   final List<String> days = [
@@ -49,6 +56,9 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     'Thursday',
     'Friday'
   ];
+  List<String> provinces = [];
+  List<String> cities = [];
+  List<String> regions = [];
 
   // Variables to store user selections
   String? selectedGrade;
@@ -56,9 +66,29 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   List<String> selectedDays = [];
   TimeOfDay? selectedTime;
 
-  // Method to select a time using the time picker
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  // Load JSON data for provinces, cities, and regions
+  Future<void> _loadData() async {
+    final regionsData = await DefaultAssetBundle.of(context)
+        .loadString('assets/pakistan_regions.json');
+    final citiesData = await DefaultAssetBundle.of(context)
+        .loadString('assets/pakistan_cities.json');
+
+    setState(() {
+      provinces = List<String>.from(json.decode(regionsData)['provinces']);
+      regions = List<String>.from(json.decode(regionsData)['regions']);
+      cities = List<String>.from(json.decode(citiesData)['cities']);
+    });
+  }
+
+  // Select time using the time picker
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime =
+    final pickedTime =
     await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (pickedTime != null) {
       setState(() {
@@ -67,6 +97,42 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
       });
     }
   }
+
+  // Dropdown for Grade/Year selection
+  void _showDropdown(List<String> items, TextEditingController controller) {
+    showModalBottomSheet(
+      backgroundColor: whiteColor,
+      context: context,
+      builder: (context) => ListView(
+        children: items.map((item) {
+          return ListTile(
+            title: CustomTextWidget(
+              text: item,
+              textColor: blackColor,
+            ),
+            onTap: () {
+              setState(() {
+                controller.text = item;
+              });
+              Navigator.pop(context);
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  // // Method to select a time using the time picker
+  // Future<void> _selectTime(BuildContext context) async {
+  //   final TimeOfDay? pickedTime =
+  //   await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  //   if (pickedTime != null) {
+  //     setState(() {
+  //       selectedTime = pickedTime;
+  //       preferredTimeController.text = pickedTime.format(context);
+  //     });
+  //   }
+  // }
 
   // Dropdown for Grade/Year selection
   void _showGradeDropdown() {
@@ -182,144 +248,182 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 60,
-            ),
-            const CustomTextWidget(
-              text: 'Student Registration',
-              textColor: blackColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            CustomTextField(
-              hintText: 'Enter Your Name',
-              controller: nameController,
-            ),
-            CustomTextField(
-              hintText: 'Email',
-              controller: emailController,
-            ),
-            CustomTextField(
-              hintText: 'Password',
-              controller: passwordController,
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.visibility_off_outlined),
+      body: Stepper(
+        currentStep: _currentStep,
+        onStepContinue: ()
+    {
+      if (_currentStep < 2) {
+        setState(() {
+          _currentStep++;
+        });
+      } else {
+        // Final step action
+        if (nameController.text.isNotEmpty &&
+            emailController.text.isNotEmpty &&
+            passwordController.text.isNotEmpty &&
+            yearController.text.isNotEmpty &&
+            learningFormatController.text.isNotEmpty &&
+            preferredDaysController.text.isNotEmpty &&
+            preferredTimeController.text.isNotEmpty) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.studentHome,
+                (route) => false,
+            arguments: {
+              'userType': 'student',
+              'name': nameController.text,
+              'email': emailController.text,
+              'password': passwordController.text,
+              'institute': instituteController.text,
+              'year': yearController.text,
+              'learningFormat': learningFormatController.text,
+              'preferredDays': preferredDaysController.text,
+              'preferredTime': preferredTimeController.text,
+            },
+          );
+        } else {
+          // Handle empty fields, show a message
+        }
+      },
+    onStepCancel : (){
+        if (_currentStep > 0){
+          setState(() {
+            _currentStep--;
+          });
+    }
+    },
+    steps: [
+      Step(
+    title: const Text('Basic Info'),
+    content: Column(
+    children: [
+      CustomTextField(hintText: 'Name', controller: nameController,),
+    CustomTextField(hintText: 'Email', controller: emailController,),
+    CustomTextField(
+    hintText: 'Password',
+    controller: passwordController,
+    suffixIcon: IconButton(
+    
+    ),
+    )
+    ],
+    )
+    )
+    ]
+        ,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 60,
               ),
-            ),
-            CustomTextField(
-              controller: instituteController,
-              hintText: 'School/College/University',
-            ),
-
-            // Grade/Year field with dropdown
-            CustomTextField(
-              controller: yearController,
-              hintText: 'Grade/Year',
-              onTap: _showGradeDropdown,
-              readOnly: true,
-            ),
-
-            // Learning Format field with dropdown
-            CustomTextField(
-              controller: learningFormatController,
-              hintText: 'Learning Format',
-              onTap: _showLearningFormatDropdown,
-              readOnly: true,
-            ),
-
-            // Preferred Days field with multiple selection modal
-            CustomTextField(
-              controller: preferredDaysController,
-              hintText: 'Preferred Days',
-              onTap: _showDaySelectionModal,
-              readOnly: true,
-            ),
-
-            // Preferred Time field with clock
-            CustomTextField(
-              controller: preferredTimeController,
-              hintText: 'Preferred Time',
-              onTap: () => _selectTime(context),
-              readOnly: true,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            CustomButton(
-              onTap: () {
-                if (nameController.text.isNotEmpty &&
-                    emailController.text.isNotEmpty &&
-                    passwordController.text.isNotEmpty &&
-                    instituteController.text.isNotEmpty &&
-                    yearController.text.isNotEmpty &&
-                    learningFormatController.text.isNotEmpty &&
-                    preferredDaysController.text.isNotEmpty &&
-                    preferredTimeController.text.isNotEmpty) {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.userGuidelines,
-                    arguments: {
-                      'userType': 'student',
-                      'name': nameController.text,
-                      'email': emailController.text,
-                      'password': passwordController.text,
-                      'institute': instituteController.text,
-                      'year': yearController.text,
-                      'learningFormat': learningFormatController.text,
-                      'preferredDays': preferredDaysController.text,
-                      'preferredTime': preferredTimeController.text,
-                    },
-                  );
-                } else {
-                  // Handle empty fields, show a message
-                }
-              },
-              buttonText: 'Create Account',
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.login);
-              },
-              child: const CustomTextWidget(
-                text: 'Already have account?',
+              const CustomTextWidget(
+                text: 'Student Registration',
                 textColor: blackColor,
-                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontSize: 24,
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text.rich(
-                TextSpan(
-                  text: 'By clicking "Create Account" you agree to our ',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'terms ',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    TextSpan(
-                      text: 'and ',
-                    ),
-                    TextSpan(
-                      text: 'privacy policy.',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ],
+              const SizedBox(
+                height: 30,
+              ),
+              CustomTextField(
+                hintText: 'Enter Your Name',
+                controller: nameController,
+              ),
+              CustomTextField(
+                hintText: 'Email',
+                controller: emailController,
+              ),
+              CustomTextField(
+                hintText: 'Password',
+                controller: passwordController,
+                suffixIcon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.visibility_off_outlined),
                 ),
               ),
-            ),
-          ],
+              CustomTextField(
+                controller: instituteController,
+                hintText: 'School/College/University',
+              ),
+
+              // Grade/Year field with dropdown
+              CustomTextField(
+                controller: yearController,
+                hintText: 'Grade/Year',
+                onTap: _showGradeDropdown,
+                readOnly: true,
+              ),
+
+              // Learning Format field with dropdown
+              CustomTextField(
+                controller: learningFormatController,
+                hintText: 'Learning Format',
+                onTap: _showLearningFormatDropdown,
+                readOnly: true,
+              ),
+
+              // Preferred Days field with multiple selection modal
+              CustomTextField(
+                controller: preferredDaysController,
+                hintText: 'Preferred Days',
+                onTap: _showDaySelectionModal,
+                readOnly: true,
+              ),
+
+              // Preferred Time field with clock
+              CustomTextField(
+                controller: preferredTimeController,
+                hintText: 'Preferred Time',
+                onTap: () => _selectTime(context),
+                readOnly: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CustomButton(
+                onTap: () {
+                  
+                buttonText: 'Create Account',
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.login);
+                },
+                child: const CustomTextWidget(
+                  text: 'Already have account?',
+                  textColor: blackColor,
+                  fontSize: 18,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text.rich(
+                  TextSpan(
+                    text: 'By clicking "Create Account" you agree to our ',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'terms ',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      TextSpan(
+                        text: 'and ',
+                      ),
+                      TextSpan(
+                        text: 'privacy policy.',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

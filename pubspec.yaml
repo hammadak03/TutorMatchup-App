@@ -19,6 +19,9 @@ dependencies:
   firebase_storage: ^12.3.2
   google_sign_in: ^6.2.1
   flutter_facebook_auth: ^7.1.1
+  dropdown_search: ^6.0.1
+  google_maps_flutter: ^2.10.0
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
