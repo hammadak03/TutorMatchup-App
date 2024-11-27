@@ -1,8 +1,70 @@
 {
-  "Gulshan-e-Iqbal": { "details": "Residential area" },
-  "Defence": { "details": "Commercial and residential area" },
-  "F-6": { "details": "Residential and commercial sector" },
-  "F-7": { "details": "Residential and commercial sector" },
-  "Akalgarh": { "details": "Residential area" },
-  "Chehla Bandi": { "details": "Residential area" }
+  "provinces": ["Punjab", "Sindh", "Balochistan", "Khyber Pakhtunkhwa", "Gilgit-Baltistan", "Azad Jammu & Kashmir", "Islamabad Capital Territory"],
+  "regions": {
+    "Punjab": [
+      "Lahore",
+      "Faisalabad",
+      "Rawalpindi",
+      "Multan",
+      "Gujranwala",
+      "Sargodha",
+      "Bahawalpur",
+      "Sialkot",
+      "Sheikhupura",
+      "Gujrat",
+      "Jhelum"
+    ],
+    "Sindh": [
+      "Karachi",
+      "Hyderabad",
+      "Sukkur",
+      "Larkana",
+      "Nawabshah",
+      "Mirpur Khas",
+      "Khairpur",
+      "Shikarpur"
+    ],
+    "Balochistan": [
+      "Quetta",
+      "Gwadar",
+      "Turbat",
+      "Khuzdar",
+      "Sibi",
+      "Zhob",
+      "Chaman",
+      "Hub"
+    ],
+    "Khyber Pakhtunkhwa": [
+      "Peshawar",
+      "Mardan",
+      "Abbottabad",
+      "Swat",
+      "Mansehra",
+      "Kohat",
+      "Dera Ismail Khan",
+      "Bannu",
+      "Chitral"
+    ],
+    "Gilgit-Baltistan": [
+      "Gilgit",
+      "Skardu",
+      "Hunza",
+      "Diamer",
+      "Ghizer",
+      "Shigar",
+      "Kharmang"
+    ],
+    "Azad Jammu & Kashmir": [
+      "Muzaffarabad",
+      "Mirpur",
+      "Kotli",
+      "Rawalakot",
+      "Bagh",
+      "Poonch",
+      "Bhimber"
+    ],
+    "Islamabad Capital Territory": [
+      "Islamabad"
+    ]
+  }
 }

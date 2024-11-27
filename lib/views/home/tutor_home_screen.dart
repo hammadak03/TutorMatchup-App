@@ -6,15 +6,14 @@ import 'package:tutor_matchup/widgets/lecture_request_card.dart';
 import 'package:tutor_matchup/widgets/upcomming_lecture_card.dart';
 
 class TutorHomeScreen extends StatefulWidget {
-  const TutorHomeScreen({super.key});
+  const TutorHomeScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _TutorHomeScreenState createState() => _TutorHomeScreenState();
 }
 
 class _TutorHomeScreenState extends State<TutorHomeScreen> {
-  double upcomingClasses = 0.5; // Default height factor for upcoming tutors
+  final double upcomingClassesRatio = 0.5; // Adjust the ratio as needed
 
   @override
   Widget build(BuildContext context) {
@@ -28,143 +27,111 @@ class _TutorHomeScreenState extends State<TutorHomeScreen> {
           fontWeight: FontWeight.w500,
         ),
         backgroundColor: whiteColor,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextWidget(
-                        text: 'Hello, ',
-                        fontSize: 16,
-                        textColor: coolGrayColor,
-                      ),
-                      CustomTextWidget(
-                        text: 'Hi Hammad',
-                        fontWeight: FontWeight.w700,
-                        textColor: blackColor,
-                        fontSize: 20,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.notifications_outlined),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.menu),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ), //appba4/intro
+            _buildHeader(context),
             const SizedBox(height: 10),
-            // Upcoming Tutors ListView
             Expanded(
-              flex: (upcomingClasses * 100)
-                  .toInt(), // Dynamically adjust based on panel slide
-              child: ListView.builder(
-                itemCount: 4,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    child: UpcommingLectureCard(
-                      onTap: () {
-                        //TODO: Pass class session data as arguements to class session screen.
-                        Navigator.pushNamed(context, Routes.classSession);
-                      },
-                      name: 'Class ${index + 1}',
-                      availableDays: 'Monday, 16 Sept',
-                      availableTime: '${index + 1}:00 - ${index + 2}:00 pm',
-                      subjects: (index % 2 == 0) ? 'Maths' : 'Biology',
-                    ),
-                  );
-                },
+              flex: (upcomingClassesRatio * 100).toInt(),
+              child: _buildUpcomingLectures(),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              child: CustomTextWidget(
+                text: 'Lecture Requests',
+                fontWeight: FontWeight.w700,
+                textColor: midnightBlueColor,
+                fontSize: 16,
               ),
             ),
-            const SizedBox(height: 10),
-
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: CustomTextWidget(
-                  text: 'Lecture Requests',
-                  fontWeight: FontWeight.w700,
-                  textColor: midnightBlueColor,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Near Tutors ListView
             Expanded(
-              flex: (100 - (upcomingClasses * 100))
-                  .toInt(), // Reverse of Upcoming Tutors
-              child: ListView.builder(
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    child: LectureRequestCard(
-                      name: 'Student ${index + 1}',
-                      year: '3rd Year',
-                      grade: 'CGPA 3.25',
-                      institute: index % 2 == 0
-                          ? 'Mehran University'
-                          : 'Sindh University',
-                    ),
-                  );
-                },
-              ),
+              flex: (100 - (upcomingClassesRatio * 100)).toInt(),
+              child: _buildLectureRequests(),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class QuickAccessButton extends StatelessWidget {
-  final Icon icon;
-  final String text;
-  final VoidCallback onPressed;
+  // Header Section
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextWidget(
+                text: 'Hello, ',
+                fontSize: 16,
+                textColor: coolGrayColor,
+              ),
+              CustomTextWidget(
+                text: 'Hi Hammad',
+                fontWeight: FontWeight.w700,
+                textColor: blackColor,
+                fontSize: 20,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {}, // Add notification logic
+                icon: const Icon(Icons.notifications_outlined),
+              ),
+              IconButton(
+                onPressed: () {}, // Add menu logic
+                icon: const Icon(Icons.menu),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-  const QuickAccessButton({
-    required this.icon,
-    required this.text,
-    required this.onPressed,
-    super.key,
-  });
+  // Upcoming Lectures Section
+  Widget _buildUpcomingLectures() {
+    return ListView.separated(
+      itemCount: 4,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+      itemBuilder: (context, index) {
+        return UpcommingLectureCard(
+          onTap: () {
+            Navigator.pushNamed(context, Routes.classSession);
+          },
+          name: 'Class ${index + 1}',
+          availableDays: 'Monday, 16 Sept',
+          availableTime: '${index + 1}:00 - ${index + 2}:00 pm',
+          subjects: index.isEven ? 'Maths' : 'Biology',
+        );
+      },
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          icon: icon,
-          onPressed: onPressed,
-        ),
-        CustomTextWidget(
-          text: text,
-          textColor: blackColor,
-          fontSize: 14,
-        ),
-      ],
+  // Lecture Requests Section
+  Widget _buildLectureRequests() {
+    return ListView.separated(
+      itemCount: 6,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
+      itemBuilder: (context, index) {
+        return LectureRequestCard(
+          name: 'Student ${index + 1}',
+          year: '3rd Year',
+          grade: 'CGPA 3.25',
+          institute: index.isEven ? 'Mehran University' : 'Sindh University',
+        );
+      },
     );
   }
 }

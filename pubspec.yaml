@@ -39,6 +39,9 @@ flutter:
     - assets/images/google_logo.png
     - assets/subjects.json
     - assets/TermsAndServices.json
+    - assets/pakistan_provinces.json
+    - assets/pakistan_cities.json
+    - assets/pakistan_regions.json
 
   fonts:
     - family: Poppins

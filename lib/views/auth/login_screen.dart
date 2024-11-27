@@ -162,21 +162,21 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            CustomButton(
-              onTap: () {},
-              buttonText: 'Login With Facebook',
-              textSize: 18,
-              image: 'assets/images/facebook_logo.png',
-            ),
-            CustomButton(
-              onTap: () {},
-              buttonText: 'Login With Google',
-              backgroundColor: whiteColor,
-              buttonTextColor: Colors.black54,
-              buttonBorderColor: Colors.black54,
-              textSize: 18,
-              image: 'assets/images/google_logo.png',
-            ),
+            // CustomButton(
+            //   onTap: () {},
+            //   buttonText: 'Login With Facebook',
+            //   textSize: 18,
+            //   image: 'assets/images/facebook_logo.png',
+            // ),
+            // CustomButton(
+            //   onTap: () {},
+            //   buttonText: 'Login With Google',
+            //   backgroundColor: whiteColor,
+            //   buttonTextColor: Colors.black54,
+            //   buttonBorderColor: Colors.black54,
+            //   textSize: 18,
+            //   image: 'assets/images/google_logo.png',
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

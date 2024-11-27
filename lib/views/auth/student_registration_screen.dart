@@ -74,16 +74,17 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
 
   // Load JSON data for provinces, cities, and regions
   Future<void> _loadData() async {
-    final regionsData = await DefaultAssetBundle.of(context)
-        .loadString('assets/pakistan_regions.json');
-    final citiesData = await DefaultAssetBundle.of(context)
-        .loadString('assets/pakistan_cities.json');
+      final regionsData = await DefaultAssetBundle.of(context)
+          .loadString('assets/pakistan_regions.json');
+      final citiesData = await DefaultAssetBundle.of(context)
+          .loadString('assets/pakistan_cities.json');
 
-    setState(() {
-      provinces = List<String>.from(json.decode(regionsData)['provinces']);
-      regions = List<String>.from(json.decode(regionsData)['regions']);
-      cities = List<String>.from(json.decode(citiesData)['cities']);
-    });
+      setState(() {
+        final decodedData = json.decode(regionsData);
+        provinces = List<String>.from(decodedData['provinces']);
+        regions = List<String>.from(json.decode(regionsData)['regions']);
+        cities = List<String>.from(json.decode(citiesData)['cities']);
+      });
   }
 
   // Select time using the time picker
@@ -346,19 +347,31 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                 hintText: 'Province',
               controller: provinceController,
               onTap: () => _showDropdown(provinces, provinceController),
-              readOnly: true,
+              suffixIcon: IconButton(
+                  icon: const Icon(Icons.arrow_drop_down),
+                onPressed: () => _showDropdown(provinces, provinceController),
+              ),
+              readOnly: false,
             ),
             CustomTextField(
               hintText: 'City',
               controller: cityController,
               onTap: () => _showDropdown(cities, cityController),
-              readOnly: true,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.arrow_drop_down),
+                onPressed: () => _showDropdown(cities, cityController),
+              ),
+              readOnly: false,
             ),
             CustomTextField(
               hintText: 'Region',
               controller: regionController,
               onTap: () => _showDropdown(regions, regionController),
-              readOnly: true,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.arrow_drop_down),
+                onPressed: () => _showDropdown(regions, regionController),
+              ),
+              readOnly: false,
             ),
           ],
         )
