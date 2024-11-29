@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -165,16 +165,16 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
   }
 
   Future<void> _pickResumeFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
-    );
+    // FilePickerResult? result = await FilePicker.platform.pickFiles(
+    //   type: FileType.custom,
+    //   allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg'],
+    // );
 
-    if (result != null) {
-      setState(() {
-        resumeFile = File(result.files.single.path!);
-      });
-    }
+    // if (result != null) {
+    //   setState(() {
+    //     resumeFile = File(result.files.single.path!);
+    //   });
+    // }
   }
 
   Future<void> _registerAndNavigate() async {

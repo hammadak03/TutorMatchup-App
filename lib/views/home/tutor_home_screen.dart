@@ -1,19 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
-import 'package:tutor_matchup/widgets/lecture_request_card.dart';
-import 'package:tutor_matchup/widgets/upcomming_lecture_card.dart';
+
+import '../../widgets/lecture_card.dart';
+import '../messages/chat_screen.dart';
+import '../profile/tutor_profile_screen.dart';
+import '../schedules/tutor_schedule_screen.dart';
 
 class TutorHomeScreen extends StatefulWidget {
   const TutorHomeScreen({Key? key}) : super(key: key);
 
   @override
-  _TutorHomeScreenState createState() => _TutorHomeScreenState();
+  State<TutorHomeScreen> createState() => _TutorHomeScreenState();
 }
 
 class _TutorHomeScreenState extends State<TutorHomeScreen> {
-  final double upcomingClassesRatio = 0.5; // Adjust the ratio as needed
+  int _currentIndex = 0;
+
+  // List of screens for the bottom navigation
+  final List<Widget> _screens = [
+    const HomeTab(),
+    const TutorScheduleScreen(),
+    const ChatScreen(),
+    const TutorProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: lightBlueColor,
+        unselectedItemColor: coolGrayColor,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.schedule),
+            label: 'Schedule',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Home tab content
+class HomeTab extends StatelessWidget {
+  const HomeTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,105 +84,33 @@ class _TutorHomeScreenState extends State<TutorHomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context),
             const SizedBox(height: 10),
-            Expanded(
-              flex: (upcomingClassesRatio * 100).toInt(),
-              child: _buildUpcomingLectures(),
-            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: CustomTextWidget(
-                text: 'Lecture Requests',
+                text: 'Upcoming Lectures',
                 fontWeight: FontWeight.w700,
                 textColor: midnightBlueColor,
                 fontSize: 16,
               ),
             ),
             Expanded(
-              flex: (100 - (upcomingClassesRatio * 100)).toInt(),
-              child: _buildLectureRequests(),
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return LectureCard(
+                    name: 'Class ${index + 1}',
+                    availableDays: 'Monday, 16 Sept',
+                    availableTime: '${index + 1}:00 - ${index + 2}:00 pm',
+                    subjects: index.isEven ? 'Maths' : 'Biology',
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // Header Section
-  Widget _buildHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextWidget(
-                text: 'Hello, ',
-                fontSize: 16,
-                textColor: coolGrayColor,
-              ),
-              CustomTextWidget(
-                text: 'Hi Hammad',
-                fontWeight: FontWeight.w700,
-                textColor: blackColor,
-                fontSize: 20,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {}, // Add notification logic
-                icon: const Icon(Icons.notifications_outlined),
-              ),
-              IconButton(
-                onPressed: () {}, // Add menu logic
-                icon: const Icon(Icons.menu),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Upcoming Lectures Section
-  Widget _buildUpcomingLectures() {
-    return ListView.separated(
-      itemCount: 4,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-      itemBuilder: (context, index) {
-        return UpcommingLectureCard(
-          onTap: () {
-            Navigator.pushNamed(context, Routes.classSession);
-          },
-          name: 'Class ${index + 1}',
-          availableDays: 'Monday, 16 Sept',
-          availableTime: '${index + 1}:00 - ${index + 2}:00 pm',
-          subjects: index.isEven ? 'Maths' : 'Biology',
-        );
-      },
-    );
-  }
-
-  // Lecture Requests Section
-  Widget _buildLectureRequests() {
-    return ListView.separated(
-      itemCount: 6,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-      itemBuilder: (context, index) {
-        return LectureRequestCard(
-          name: 'Student ${index + 1}',
-          year: '3rd Year',
-          grade: 'CGPA 3.25',
-          institute: index.isEven ? 'Mehran University' : 'Sindh University',
-        );
-      },
     );
   }
 }

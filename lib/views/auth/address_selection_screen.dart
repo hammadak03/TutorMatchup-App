@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:dropdown_search/dropdown_search.dart';
+// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../routes/routes.dart';
 
@@ -30,7 +30,7 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
   String _selectedAddress = '';
 
   // Sliding Panel Controller
-  final PanelController _panelController = PanelController();
+  // final PageController _panelController = PanelController();
 
   // Sample Data for Provinces, Cities, and Regions
   Map<String, dynamic> _provincesData = {};
@@ -86,12 +86,12 @@ class _AddressSelectionScreenState extends State<AddressSelectionScreen> {
           ),
 
           // Sliding Panel
-          SlidingUpPanel(
-            controller: _panelController,
-            minHeight: 100,
-            maxHeight: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
-            panel: _buildSlidingPanelContent(),
-          ),
+          // SlidingUpPanel(
+          //   controller: _panelController,
+          //   minHeight: 100,
+          //   maxHeight: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
+          //   panel: _buildSlidingPanelContent(),
+          // ),
         ],
       ),
     );

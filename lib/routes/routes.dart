@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tutor_matchup/views/auth/address_selection_screen.dart';
 import 'package:tutor_matchup/views/auth/tutor_address_screen.dart';
 import 'package:tutor_matchup/views/messages/chat_screen.dart';
+import 'package:tutor_matchup/views/profile/tutor_profile_screen.dart';
 import 'package:tutor_matchup/views/schedules/class_session_screen.dart';
 import 'package:tutor_matchup/views/schedules/completed_schedules_screen.dart';
 import 'package:tutor_matchup/views/auth/forgot_password_screen.dart';
@@ -16,6 +17,7 @@ import 'package:tutor_matchup/views/auth/student_registration_screen.dart';
 import 'package:tutor_matchup/views/profile/tutor_details_screen.dart';
 import 'package:tutor_matchup/views/home/tutor_home_screen.dart';
 import 'package:tutor_matchup/views/auth/tutor_registration_screen.dart';
+import 'package:tutor_matchup/views/schedules/tutor_schedule_screen.dart';
 import 'package:tutor_matchup/views/schedules/upcoming_schedule_screen.dart';
 import 'package:tutor_matchup/views/auth/user_guidelines_screen.dart';
 
@@ -42,6 +44,8 @@ class Routes {
   // Define editProfile as a static constant
   static const String editProfile = '/editProfile';
   static const String tutorAddress = '/tutorAddress';
+  static const String tutorSchedule = '/tutorSchedule';
+  static const String tutorProfile = '/tutorProfile';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -64,4 +68,6 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.forgotPassword: (context) => const ForgotPasswordScreen(),
   Routes.mapSelection: (context) => const AddressSelectionScreen(),
   Routes.tutorAddress: (context) => const TutorAddressScreen(tutorDetails: {},),
+  Routes.tutorSchedule: (context) => const TutorScheduleScreen(),
+  Routes.tutorProfile: (context) => const TutorProfileScreen(),
 };
