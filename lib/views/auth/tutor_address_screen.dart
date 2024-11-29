@@ -3,6 +3,8 @@ import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
 
+import '../../routes/routes.dart';
+
 class TutorAddressScreen extends StatefulWidget {
   final Map<String, dynamic> tutorDetails;
 
@@ -64,8 +66,13 @@ class _TutorAddressScreenState extends State<TutorAddressScreen> {
                     ...addressDetails,
                   };
 
-                  // Navigate to the next screen or submit the data.
-                  print("Complete Tutor Details: $completeTutorDetails");
+                  // Navigate to tutorHome
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.tutorHome,
+                        (route) => false,
+                    arguments: completeTutorDetails,
+                  );
                 },
               ),
               const SizedBox(height: 20),

@@ -1,6 +1,7 @@
 // routes.dart
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/views/auth/address_selection_screen.dart';
+import 'package:tutor_matchup/views/auth/tutor_address_screen.dart';
 import 'package:tutor_matchup/views/messages/chat_screen.dart';
 import 'package:tutor_matchup/views/schedules/class_session_screen.dart';
 import 'package:tutor_matchup/views/schedules/completed_schedules_screen.dart';
@@ -40,6 +41,7 @@ class Routes {
   static const String mapSelection = '/mapSelection';
   // Define editProfile as a static constant
   static const String editProfile = '/editProfile';
+  static const String tutorAddress = '/tutorAddress';
 }
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -61,4 +63,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   Routes.tutorDetails: (context) => const TutorDetailsSceens(),
   Routes.forgotPassword: (context) => const ForgotPasswordScreen(),
   Routes.mapSelection: (context) => const AddressSelectionScreen(),
+  Routes.tutorAddress: (context) => const TutorAddressScreen(tutorDetails: {},),
 };

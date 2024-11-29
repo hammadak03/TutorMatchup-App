@@ -286,7 +286,12 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
             },
           );
         } else {
-          // Handle empty fields, show a message
+// Show an error message if fields are empty
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+              content: Text('Please fill all the required fields.')
+              )
+          );
         }
       }
       },
@@ -347,30 +352,18 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
                 hintText: 'Province',
               controller: provinceController,
               onTap: () => _showDropdown(provinces, provinceController),
-              suffixIcon: IconButton(
-                  icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () => _showDropdown(provinces, provinceController),
-              ),
               readOnly: false,
             ),
             CustomTextField(
               hintText: 'City',
               controller: cityController,
               onTap: () => _showDropdown(cities, cityController),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () => _showDropdown(cities, cityController),
-              ),
               readOnly: false,
             ),
             CustomTextField(
               hintText: 'Region',
               controller: regionController,
               onTap: () => _showDropdown(regions, regionController),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.arrow_drop_down),
-                onPressed: () => _showDropdown(regions, regionController),
-              ),
               readOnly: false,
             ),
           ],

@@ -198,7 +198,7 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
       // Navigate to the User Guidelines page with form data
       Navigator.pushNamed(
         context,
-        Routes.mapSelection,
+        Routes.tutorAddress,
         arguments: {
           'userType': 'tutor', // Add userType
           'name': nameController.text,
