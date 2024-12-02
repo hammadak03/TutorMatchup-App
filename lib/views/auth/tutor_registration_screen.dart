@@ -179,10 +179,10 @@ class _TutorRegistrationScreenState extends State<TutorRegistrationScreen> {
 
   Future<void> _registerAndNavigate() async {
     // Ensure form is filled
-    if (nameController.text.isNotEmpty &&
-        emailController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        phoneNoController.text.isNotEmpty
+    if (nameController.text.isNotEmpty
+        // emailController.text.isNotEmpty &&
+        // passwordController.text.isNotEmpty &&
+        // phoneNoController.text.isNotEmpty
     ) {
       // Upload resume
       String? resumeUrl = await _uploadResume();

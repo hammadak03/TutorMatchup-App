@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tutor_matchup/routes/routes.dart';
 import 'package:tutor_matchup/utils/colors.dart';
-import 'package:tutor_matchup/widgets/custom_button.dart';
 import 'package:tutor_matchup/widgets/custom_text_field.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 
@@ -24,7 +23,7 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
   final TextEditingController instituteController = TextEditingController();
   final TextEditingController yearController = TextEditingController();
   final TextEditingController learningFormatController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController preferredDaysController = TextEditingController();
   final TextEditingController preferredTimeController = TextEditingController();
   final TextEditingController provinceController = TextEditingController();
@@ -74,23 +73,23 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
 
   // Load JSON data for provinces, cities, and regions
   Future<void> _loadData() async {
-      final regionsData = await DefaultAssetBundle.of(context)
-          .loadString('assets/pakistan_regions.json');
-      final citiesData = await DefaultAssetBundle.of(context)
-          .loadString('assets/pakistan_cities.json');
+    final regionsData = await DefaultAssetBundle.of(context)
+        .loadString('assets/pakistan_regions.json');
+    final citiesData = await DefaultAssetBundle.of(context)
+        .loadString('assets/pakistan_cities.json');
 
-      setState(() {
-        final decodedData = json.decode(regionsData);
-        provinces = List<String>.from(decodedData['provinces']);
-        regions = List<String>.from(json.decode(regionsData)['regions']);
-        cities = List<String>.from(json.decode(citiesData)['cities']);
-      });
+    setState(() {
+      final decodedData = json.decode(regionsData);
+      provinces = List<String>.from(decodedData['provinces']);
+      regions = List<String>.from(json.decode(regionsData)['regions']);
+      cities = List<String>.from(json.decode(citiesData)['cities']);
+    });
   }
 
   // Select time using the time picker
   Future<void> _selectTime(BuildContext context) async {
     final pickedTime =
-    await showTimePicker(context: context, initialTime: TimeOfDay.now());
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (pickedTime != null) {
       setState(() {
         selectedTime = pickedTime;
@@ -250,128 +249,127 @@ class _StudentRegistrationScreenState extends State<StudentRegistrationScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       body: Stepper(
-        currentStep: _currentStep,
-        onStepContinue: ()
-    {
-      if (_currentStep < 2) {
-        setState(() {
-          _currentStep++;
-        });
-      } else {
-        // Final step action
-        if (nameController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            passwordController.text.isNotEmpty &&
-            yearController.text.isNotEmpty &&
-            learningFormatController.text.isNotEmpty &&
-            preferredDaysController.text.isNotEmpty &&
-            preferredTimeController.text.isNotEmpty) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            Routes.studentHome,
-                (route) => false,
-            arguments: {
-              'userType': 'student',
-              'name': nameController.text,
-              'email': emailController.text,
-              'password': passwordController.text,
-              'institute': instituteController.text,
-              'year': yearController.text,
-              'learningFormat': learningFormatController.text,
-              'preferredDays': preferredDaysController.text,
-              'preferredTime': preferredTimeController.text,
-              'province': provinceController.text,
-              'city': cityController.text,
-              'region': regionController.text,
-            },
-          );
-        } else {
+          currentStep: _currentStep,
+          onStepContinue: () {
+            if (_currentStep < 2) {
+              setState(() {
+                _currentStep++;
+              });
+            } else {
+              // Final step action
+              if (nameController.text.isNotEmpty &&
+                  emailController.text.isNotEmpty &&
+                  passwordController.text.isNotEmpty
+                  // yearController.text.isNotEmpty &&
+                  // learningFormatController.text.isNotEmpty &&
+                  // preferredDaysController.text.isNotEmpty &&
+                  // preferredTimeController.text.isNotEmpty
+                  ) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.studentHome,
+                  (route) => false,
+                  arguments: {
+                    'userType': 'student',
+                    'name': nameController.text,
+                    'email': emailController.text,
+                    'password': passwordController.text,
+                    'institute': instituteController.text,
+                    'year': yearController.text,
+                    'learningFormat': learningFormatController.text,
+                    'preferredDays': preferredDaysController.text,
+                    'preferredTime': preferredTimeController.text,
+                    'province': provinceController.text,
+                    'city': cityController.text,
+                    'region': regionController.text,
+                  },
+                );
+              } else {
 // Show an error message if fields are empty
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-              content: Text('Please fill all the required fields.')
-              )
-          );
-        }
-      }
-      },
-    onStepCancel : (){
-        if (_currentStep > 0){
-          setState(() {
-            _currentStep--;
-          });
-    }
-    },
-    steps: [
-      Step(
-    title: const Text('Basic Info'),
-    content: Column(
-    children: [
-      CustomTextField(hintText: 'Name', controller: nameController,),
-    CustomTextField(hintText: 'Email', controller: emailController,),
-    CustomTextField(
-    hintText: 'Password',
-    controller: passwordController,
-    suffixIcon: IconButton(
-    icon: const Icon(Icons.visibility_off),
-    onPressed: (){},
-      ),
-    )
-    ],
-    ),
-    ),
-    Step(
-    title: const Text('Academic Details'),
-    content: Column(
-      children: [
-      CustomTextField(
-    hintText: 'School/College/University',
-    controller: instituteController,
-    ),
-    CustomTextField(
-    hintText: 'Grade/Year',
-    controller: yearController,
-    onTap: ()=> _showDropdown(grades, yearController),
-    readOnly: true,
-    ),
-    CustomTextField(
-    hintText: 'Learning Format',
-    controller: learningFormatController,
-    onTap: ()=> _showDropdown(learningFormats, learningFormatController),
-    readOnly: true,
-    )
-      ],
-    )
-    )
-    ,
-      Step(
-        title: const Text('Loction Details'),
-        content: Column(
-          children: [
-            CustomTextField(
-                hintText: 'Province',
-              controller: provinceController,
-              onTap: () => _showDropdown(provinces, provinceController),
-              readOnly: false,
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Please fill all the required fields.')));
+              }
+            }
+          },
+          onStepCancel: () {
+            if (_currentStep > 0) {
+              setState(() {
+                _currentStep--;
+              });
+            }
+          },
+          steps: [
+            Step(
+              title: const Text('Basic Info'),
+              content: Column(
+                children: [
+                  CustomTextField(
+                    hintText: 'Name',
+                    controller: nameController,
+                  ),
+                  CustomTextField(
+                    hintText: 'Email',
+                    controller: emailController,
+                  ),
+                  CustomTextField(
+                    hintText: 'Password',
+                    controller: passwordController,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.visibility_off),
+                      onPressed: () {},
+                    ),
+                  )
+                ],
+              ),
             ),
-            CustomTextField(
-              hintText: 'City',
-              controller: cityController,
-              onTap: () => _showDropdown(cities, cityController),
-              readOnly: false,
-            ),
-            CustomTextField(
-              hintText: 'Region',
-              controller: regionController,
-              onTap: () => _showDropdown(regions, regionController),
-              readOnly: false,
-            ),
-          ],
-        )
-    )
-
-    ]
-      ),
+            Step(
+                title: const Text('Academic Details'),
+                content: Column(
+                  children: [
+                    CustomTextField(
+                      hintText: 'School/College/University',
+                      controller: instituteController,
+                    ),
+                    CustomTextField(
+                      hintText: 'Grade/Year',
+                      controller: yearController,
+                      onTap: () => _showDropdown(grades, yearController),
+                      readOnly: true,
+                    ),
+                    CustomTextField(
+                      hintText: 'Learning Format',
+                      controller: learningFormatController,
+                      onTap: () => _showDropdown(
+                          learningFormats, learningFormatController),
+                      readOnly: true,
+                    )
+                  ],
+                )),
+            Step(
+                title: const Text('Loction Details'),
+                content: Column(
+                  children: [
+                    CustomTextField(
+                      hintText: 'Province',
+                      controller: provinceController,
+                      onTap: () => _showDropdown(provinces, provinceController),
+                      readOnly: false,
+                    ),
+                    CustomTextField(
+                      hintText: 'City',
+                      controller: cityController,
+                      onTap: () => _showDropdown(cities, cityController),
+                      readOnly: false,
+                    ),
+                    CustomTextField(
+                      hintText: 'Region',
+                      controller: regionController,
+                      onTap: () => _showDropdown(regions, regionController),
+                      readOnly: false,
+                    ),
+                  ],
+                ))
+          ]),
     );
   }
 }

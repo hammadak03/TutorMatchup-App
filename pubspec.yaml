@@ -22,8 +22,6 @@ dependencies:
   dropdown_search: ^6.0.1
   google_maps_flutter: ^2.10.0
   sliding_up_panel: ^2.0.0+1
-  table_calendar: ^3.1.2
-  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:

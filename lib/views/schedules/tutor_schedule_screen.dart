@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:table_calendar/table_calendar.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+// import 'package:table_calendar/table_calendar.dart';
 import 'package:tutor_matchup/utils/colors.dart';
 import 'package:tutor_matchup/widgets/custom_text_widget.dart';
 import 'package:tutor_matchup/widgets/custom_button.dart';
@@ -77,23 +77,23 @@ class _TutorScheduleScreenState extends State<TutorScheduleScreen> {
               fontWeight: FontWeight.w700,
             ),
             const SizedBox(height: 10),
-            TableCalendar(
-              firstDay: DateTime(2020),
-              lastDay: DateTime(2100),
-              focusedDay: _selectedDate,
-              selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDate = selectedDay;
-                });
-              },
-              calendarStyle: const CalendarStyle(
-                selectedDecoration: BoxDecoration(
-                  color: lightBlueColor,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
+            // TableCalendar(
+            //   firstDay: DateTime(2020),
+            //   lastDay: DateTime(2100),
+            //   focusedDay: _selectedDate,
+            //   selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+            //   onDaySelected: (selectedDay, focusedDay) {
+            //     setState(() {
+            //       _selectedDate = selectedDay;
+            //     });
+            //   },
+            //   calendarStyle: const CalendarStyle(
+            //     selectedDecoration: BoxDecoration(
+            //       color: lightBlueColor,
+            //       shape: BoxShape.circle,
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 20),
             const CustomTextWidget(
               text: 'Select Time',
@@ -109,14 +109,15 @@ class _TutorScheduleScreenState extends State<TutorScheduleScreen> {
                   showSecondsColumn: false,
                   onConfirm: (dateTime) {
                     setState(() {
-                      _selectedTime =
-                          TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+                      _selectedTime = TimeOfDay(
+                          hour: dateTime.hour, minute: dateTime.minute);
                     });
                   },
                 );
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: coolGrayColor),
                   borderRadius: BorderRadius.circular(8),
@@ -154,4 +155,18 @@ class _TutorScheduleScreenState extends State<TutorScheduleScreen> {
       ),
     );
   }
+
+  isSameDay(DateTime selectedDate, day) {}
+}
+
+class TableCalendar {}
+
+class CalendarStyle {
+  const CalendarStyle();
+}
+
+class DatePicker {
+  static void showTimePicker(BuildContext context,
+      {required bool showSecondsColumn,
+      required Null Function(dynamic dateTime) onConfirm}) {}
 }
