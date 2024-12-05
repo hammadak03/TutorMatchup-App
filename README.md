@@ -1,6 +1,6 @@
 # tutor_matchup
 
-A new Flutter project.
+A new Flutter project which connects students with neraby tutors and let them acknowledge their schedule and qualification, moreover, also create class schedules where they can join tutor's schedule at their required location.
 
 ## Getting Started
 
